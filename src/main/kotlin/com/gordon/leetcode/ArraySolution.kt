@@ -32,3 +32,20 @@ fun removeElement2(nums: IntArray, `val`: Int): Int {
     }
     return left
 }
+
+fun sortedSquares(nums: IntArray): IntArray {
+    val newArray = IntArray(nums.size)
+    var l = 0
+    var r = nums.size - 1
+    var index = nums.lastIndex
+    while (l <= r) {
+        if (nums[l] * nums[l] > nums[r] * nums[r]) {
+            newArray[index--] = nums[l] * nums[l]
+            l++
+        } else {
+            newArray[index--] = nums[r] * nums[r]
+            r--
+        }
+    }
+    return newArray
+}

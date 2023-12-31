@@ -49,3 +49,28 @@ fun sortedSquares(nums: IntArray): IntArray {
     }
     return newArray
 }
+
+fun minSubArrayLen(target: Int, nums: IntArray): Int {
+    var sum = 0
+    var i = 0
+    var j = 0
+    val r = nums.size
+    var result = Int.MAX_VALUE
+    while (j < r) {
+        println("sum = $sum")
+        sum += nums[j]
+        j++
+        while (sum >= target && j >= i) {
+            println("sum=$sum,i=$i,j=$j")
+            result = minOf(result, j - i)
+            sum -= nums[i]
+            i++
+        }
+    }
+    return if (result == Int.MAX_VALUE) 0 else result
+}
+
+fun main() {
+    val nums = intArrayOf(2, 3, 1, 2, 4, 3)
+    minSubArrayLen(7, nums)
+}

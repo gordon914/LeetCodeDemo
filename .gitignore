@@ -5,3 +5,4 @@ gen
 .gradle
 /gradlew
 /gradlew.bat
+build/

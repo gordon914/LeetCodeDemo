@@ -70,6 +70,41 @@ fun minSubArrayLen(target: Int, nums: IntArray): Int {
     return if (result == Int.MAX_VALUE) 0 else result
 }
 
+fun generateMatrix(n: Int): Array<IntArray> {
+    val arr = Array(n) { IntArray(n) } //二维数组的定义
+    var i: Int
+    var j: Int
+    var count = 1
+    var loop = 0
+    var start = 0
+    while (loop++ < n / 2) {
+        j = start //临时变量的定义
+        while (j < n - loop) {
+            arr[start][j] = count++
+            j++
+        }
+        i = start
+        while (i < n - loop) {
+            arr[i][j] = count++
+            i++
+        }
+        while (j >= loop) {
+            arr[i][j] = count++
+            j--
+        }
+        while (i >= loop) {
+            arr[i][j] = count++
+            i--
+
+        }
+        start++
+    }
+    if (n % 2 != 0) {
+        arr[start][start] = count
+    }
+    return arr
+}
+
 fun main() {
     val nums = intArrayOf(2, 3, 1, 2, 4, 3)
     minSubArrayLen(7, nums)

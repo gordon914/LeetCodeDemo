@@ -105,6 +105,8 @@ fun generateMatrix(n: Int): Array<IntArray> {
     return arr
 }
 
+
+
 fun main() {
     val nums = intArrayOf(2, 3, 1, 2, 4, 3)
     minSubArrayLen(7, nums)

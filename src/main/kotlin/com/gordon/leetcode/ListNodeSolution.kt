@@ -17,3 +17,15 @@ fun removeElements(head: ListNode?, `val`: Int): ListNode? {
     }
     return dummy.next
 }
+
+fun reverseList(head: ListNode?): ListNode? {
+    var pre:ListNode? = null
+    var curr = head
+    while (curr != null) {
+        val tmp = curr.next
+        curr.next = pre
+        pre = curr
+        curr = tmp
+    }
+    return pre
+}

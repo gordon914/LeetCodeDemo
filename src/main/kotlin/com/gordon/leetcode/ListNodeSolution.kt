@@ -64,3 +64,32 @@ fun removeNthFromEnd(head: ListNode?, n: Int): ListNode? {
     slow?.next = slow?.next?.next
     return dummy.next
 }
+
+fun getIntersectionNode(headA: ListNode?, headB: ListNode?): ListNode? {
+    var l1 = headA
+    var l2 = headB
+    var len1 = 0
+    var len2 = 0
+    while (l1 != null) {
+        l1 = l1.next
+        len1++
+    }
+    while (l2 != null) {
+        l2 = l2.next
+        len2++
+    }
+    if (len1 < len2) {
+        return getIntersectionNode(headB, headA)
+    }
+    val distance = len1 - len2
+    var fast = headA
+    var slow = headB
+    while (distance > 0) {
+        fast = fast?.next
+    }
+    while (fast != slow && fast != null) {
+        fast = fast.next
+        slow = slow?.next
+    }
+    return slow
+}

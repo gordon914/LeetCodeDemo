@@ -93,3 +93,22 @@ fun getIntersectionNode(headA: ListNode?, headB: ListNode?): ListNode? {
     }
     return slow
 }
+
+fun detectCycle(head: ListNode?): ListNode? {
+    var fast = head
+    var slow = head
+    while (fast?.next != null) {
+        fast = fast.next?.next
+        slow = slow?.next
+        if (fast == slow) {
+            var l1 = fast
+            var l2 = head
+            while (l1 != l2) {
+                l1 = l1?.next
+                l2 = l2?.next
+            }
+            return l1
+        }
+    }
+    return null
+}

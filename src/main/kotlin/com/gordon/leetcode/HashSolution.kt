@@ -10,3 +10,14 @@ fun isAnagram(s: String, t: String): Boolean {
     }
     return hash.all { it == 0 }
 }
+
+fun intersection(nums1: IntArray, nums2: IntArray): IntArray {
+    val hash = nums1.toHashSet()
+    val resultHash = mutableSetOf<Int>()
+    nums2.forEach {
+        if (hash.contains(it)) {
+            resultHash.add(it)
+        }
+    }
+   return resultHash.toIntArray()
+}

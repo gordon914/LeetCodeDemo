@@ -19,5 +19,24 @@ fun intersection(nums1: IntArray, nums2: IntArray): IntArray {
             resultHash.add(it)
         }
     }
-   return resultHash.toIntArray()
+    return resultHash.toIntArray()
+}
+
+fun isHappy(n: Int): Boolean {
+    val hashSet = mutableSetOf<Int>()
+    var num = n
+    while (num != 1) {
+        if (hashSet.contains(num)) {
+            return false
+        }
+        hashSet.add(num)
+        var sum = 0
+        while (num != 0) {
+            val bi = num%10
+            sum += bi*bi
+            num /= 10
+        }
+        num = sum
+    }
+    return true
 }

@@ -67,3 +67,16 @@ fun fourSumCount(nums1: IntArray, nums2: IntArray, nums3: IntArray, nums4: IntAr
     }
     return res
 }
+
+fun canConstruct(ransomNote: String, magazine: String): Boolean {
+    val hash = IntArray(26) { 0 }
+    ransomNote.forEach {
+        hash[it - 'a']++
+    }
+    for (c in magazine.toCharArray()) {
+        if (hash[c - 'a'] > 0) {
+            hash[c - 'a']--
+        }
+    }
+    return hash.all { it == 0 }
+}

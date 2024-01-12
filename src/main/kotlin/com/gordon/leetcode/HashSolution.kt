@@ -80,3 +80,41 @@ fun canConstruct(ransomNote: String, magazine: String): Boolean {
     }
     return hash.all { it == 0 }
 }
+
+/**
+ * 排序,去重
+ * 双指针,指向当前遍历的位置i的下一个位置和数组的末尾位置
+ */
+fun threeSum(nums: IntArray): List<List<Int>> {
+    val result = mutableListOf<List<Int>>()
+    nums.sort()
+    for (i in nums.indices) {
+        if (nums[i] > 0) {
+            return result
+        }
+        if (i > 0 && nums[i] == nums[i - 1]) {
+            continue
+        }
+        var l = i + 1
+        var r = nums.lastIndex
+        while (r > l) {
+            val sum = nums[i] + nums[l] + nums[r]
+            if (sum > 0) {
+                r--
+            } else if (sum < 0) {
+                l++
+            } else {
+                result.add(listOf(nums[i], nums[l], nums[r]))
+                while (r > l && nums[r] == nums[r - 1]) {
+                    r--
+                }
+                while (r > l && nums[l] == nums[l + 1]) {
+                    l++
+                }
+                r--
+                l++
+            }
+        }
+    }
+    return result
+}

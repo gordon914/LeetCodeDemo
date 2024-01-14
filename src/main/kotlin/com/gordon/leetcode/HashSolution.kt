@@ -118,3 +118,42 @@ fun threeSum(nums: IntArray): List<List<Int>> {
     }
     return result
 }
+
+fun fourSum(nums: IntArray, target: Int): List<List<Int>> {
+    val result = mutableListOf<List<Int>>()
+    nums.sort()
+    for (i in nums.indices) {
+        if (nums[i] > 0 && nums[i] > target) {
+            return result
+        }
+        if (i > 0 && nums[i] == nums[i - 1]) {
+            continue
+        }
+        for (j in i + 1 until nums.size) {
+            if (j > i + 1 && nums[j] == nums[j - 1]) {
+                continue
+            }
+            var l = j + 1
+            var r = nums.lastIndex
+            while (r > l) {
+                val sum: Long = (nums[i] + nums[j] + nums[l] + nums[r]).toLong()
+                if (sum > target) {
+                    r--
+                } else if (sum < target) {
+                    l++
+                } else {
+                    result.add(listOf(nums[i],nums[j], nums[l], nums[r]))
+                    while (r > l && nums[r] == nums[r - 1]) {
+                        r--
+                    }
+                    while (r > l && nums[l] == nums[l + 1]) {
+                        l++
+                    }
+                    r--
+                    l++
+                }
+            }
+        }
+    }
+    return result
+}

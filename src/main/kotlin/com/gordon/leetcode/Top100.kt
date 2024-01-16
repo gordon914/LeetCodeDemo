@@ -21,3 +21,23 @@ fun maxArea(height: IntArray): Int {
     }
     return res
 }
+
+/**
+ * 字母异位词分组
+ * 对字符串进行字符排序,那么字母异位词就是相同的key了.
+ * 因为key对应多个值,用List来存储.
+ * 所以使用Map<String,List<String>>存储结果
+ * 注意,map先取出默认的空列表,然后再put进去,下次取出来就不是空的List了
+ */
+fun groupAnagrams(strs: Array<String>): List<List<String>> {
+    val map = hashMapOf<String, ArrayList<String>>()
+    strs.forEach {
+        val chars = it.toCharArray()
+        chars.sort()
+        val key = String(chars)
+        val list = map.getOrDefault(key, arrayListOf())
+        list.add(it)
+        map[key] = list
+    }
+    return map.values.toList()
+}

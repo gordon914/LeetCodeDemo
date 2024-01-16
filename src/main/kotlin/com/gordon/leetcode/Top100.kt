@@ -41,3 +41,23 @@ fun groupAnagrams(strs: Array<String>): List<List<String>> {
     }
     return map.values.toList()
 }
+
+fun longestConsecutive(nums: IntArray): Int {
+    val hashNum = hashSetOf<Int>()
+    nums.forEach {
+        hashNum.add(it)
+    }
+    var maxLen = 0
+    for (num in hashNum) {
+        if (!hashNum.contains(num - 1)) {
+            var curr = num
+            var len = 1
+            while (hashNum.contains(curr + 1)) {
+                curr += 1
+                len++
+            }
+            maxLen = maxLen.coerceAtLeast(len)
+        }
+    }
+    return maxLen
+}

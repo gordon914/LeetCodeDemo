@@ -74,3 +74,36 @@ private fun reverse(sb: StringBuilder, start: Int, end: Int) {
         r--
     }
 }
+
+//前缀表（不减一）Java实现
+fun strStr(haystack: String, needle: String): Int {
+    if (needle.isEmpty()) return 0
+    val next = IntArray(needle.length)
+    getNext(next, needle)
+
+    var j = 0
+    for (i in haystack.indices) {
+        //当不匹配时,前一个元素对应的前缀表中的值,
+        while (j > 0 && needle[j] != haystack[i]) j = next[j - 1]
+        if (needle[j] == haystack[i]) j++
+        if (j == needle.length) return i - j + 1
+    }
+    return -1
+}
+
+/**
+ * 构造前缀表
+ */
+private fun getNext(next: IntArray, s: String) {
+    var j = 0
+    next[0] = 0
+    for (i in 1 until s.length) {
+        while (j > 0 && s[i] != s[j]) {
+            j = next[j - 1]
+        }
+        if (s[i] == s[j]) {
+            j++
+        }
+        next[i] = j
+    }
+}

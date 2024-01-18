@@ -107,3 +107,7 @@ private fun getNext(next: IntArray, s: String) {
         next[i] = j
     }
 }
+
+fun repeatedSubstringPattern(s: String): Boolean {
+    return (s + s).indexOf(s, 1) != s.length
+}

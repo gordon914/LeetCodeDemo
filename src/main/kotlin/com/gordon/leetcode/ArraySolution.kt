@@ -3,7 +3,7 @@ package org.example.com.gordon.leetcode
 /**
  * 移除指定元素
  */
-fun removeElement(nums: IntArray, `val`: Int): Int {
+private fun removeElement(nums: IntArray, `val`: Int): Int {
     var position = 0
     var i = 0
     val size = nums.size
@@ -104,7 +104,6 @@ fun generateMatrix(n: Int): Array<IntArray> {
     }
     return arr
 }
-
 
 
 fun main() {

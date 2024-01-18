@@ -15,3 +15,15 @@ private fun removeElement(nums: IntArray, `val`: Int): Int {
     }
     return l
 }
+
+private fun reverseString2(s: CharArray): Unit {
+    var l = 0
+    var r = s.lastIndex
+    while (l < r) {
+        val tmp = s[l]
+        s[l] = s[r]
+        s[r] = tmp
+        l++
+        r--
+    }
+}

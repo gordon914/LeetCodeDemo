@@ -64,12 +64,15 @@ private fun evalRPN(tokens: Array<String>): Int {
                 symbols[0] -> {
                     stack.push((first + second).toString())
                 }
+
                 symbols[1] -> {
                     stack.push((first - second).toString())
                 }
+
                 symbols[2] -> {
                     stack.push((first * second).toString())
                 }
+
                 symbols[3] -> {
                     stack.push((first / second).toString())
                 }
@@ -79,4 +82,44 @@ private fun evalRPN(tokens: Array<String>): Int {
         }
     }
     return stack.pop().toInt()
+}
+
+private fun maxSlidingWindow(nums: IntArray, k: Int): IntArray {
+    if (nums.size == 1) {
+        return nums
+    }
+    val result = IntArray(nums.size - k + 1)
+    val queue = MyQueue()
+    var index = 0
+    repeat(k) {
+        queue.add(nums[it])
+    }
+    result[index++] = queue.peek()
+    for (i in k until nums.size) {
+        queue.poll(nums[i - k])
+        queue.add(nums[i])
+        result[index++] = queue.peek()
+    }
+    return result
+}
+
+class MyQueue {
+    val queue = LinkedList<Int>()
+
+    fun add(value: Int) {
+        while (queue.isNotEmpty() && value > queue.last()) {
+            queue.removeLast()
+        }
+        queue.add(value)
+    }
+
+    fun peek(): Int {
+        return queue.peek()
+    }
+
+    fun poll(value: Int) {
+        if (queue.isNotEmpty() && queue.peek() == value) {
+            queue.pop()
+        }
+    }
 }

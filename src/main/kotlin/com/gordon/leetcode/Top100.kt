@@ -61,3 +61,18 @@ fun longestConsecutive(nums: IntArray): Int {
     }
     return maxLen
 }
+
+private fun moveZeroes(nums: IntArray): Unit {
+    var i = 0
+    var j = 0
+    while (j < nums.size) {
+        if (nums[j] != 0) {
+            nums[i++] = nums[j]
+        }
+        j++
+    }
+    while (i < nums.size) {
+        nums[i] = 0
+        i++
+    }
+}

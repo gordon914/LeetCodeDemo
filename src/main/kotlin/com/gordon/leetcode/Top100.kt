@@ -16,7 +16,6 @@ private fun twoSum(nums: IntArray, target: Int): IntArray {
 }
 
 
-
 /**
  * 2.字母异位词分组
  * 对字符串进行字符排序,那么字母异位词就是相同的key了.
@@ -82,7 +81,7 @@ private fun moveZeroes(nums: IntArray): Unit {
  * 4.移动零
  * 优化写法,如果数组中0比较多,用这种方法移动的数字就会比较少
  */
-private fun moveZeroes2(nums: IntArray){
+private fun moveZeroes2(nums: IntArray) {
     var i = 0
     var j = 0
     while (j < nums.size) {
@@ -116,4 +115,65 @@ private fun maxArea(height: IntArray): Int {
         }
     }
     return res
+}
+
+/**
+ * 6.三数之和
+ * 求合为0的三元数组
+ */
+private fun threeSum(nums: IntArray): List<List<Int>> {
+    val result = mutableListOf<List<Int>>()
+    nums.sort()
+    for (i in nums.indices) {
+        if (nums[i] > 0) {
+            return result
+        }
+        if (i > 0 && nums[i] == nums[i - 1]) {
+            continue
+        }
+        var l = i + 1
+        var r = nums.lastIndex
+        while (r > l) {
+            val sum = nums[i] + nums[l] + nums[r]
+            if (sum > 0) {
+                r--
+            } else if (sum < 0) {
+                l++
+            } else {
+                result.add(listOf(nums[i], nums[l], nums[r]))
+                while (r > l && nums[r] == nums[r - 1]) {
+                    r--
+                }
+                while (r > l && nums[l] == nums[l + 1]) {
+                    l++
+                }
+                r--
+                l++
+            }
+        }
+    }
+    return result
+}
+
+/**
+ * 7.接雨水
+ */
+private fun trap(height: IntArray): Int {
+    var l = 0
+    var r = height.lastIndex
+    var maxLeft = 0
+    var maxRight = 0
+    var ans = 0
+    while (l < r) {
+        maxLeft = maxLeft.coerceAtLeast(height[l])
+        maxRight = maxRight.coerceAtLeast(height[r])
+        if (height[l] < height[r]) {
+            ans += maxLeft - height[l]
+            l++
+        } else {
+            ans += maxRight - height[r]
+            r--
+        }
+    }
+    return ans
 }

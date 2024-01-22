@@ -85,7 +85,7 @@ fun canConstruct(ransomNote: String, magazine: String): Boolean {
  * 排序,去重
  * 双指针,指向当前遍历的位置i的下一个位置和数组的末尾位置
  */
-fun threeSum(nums: IntArray): List<List<Int>> {
+private fun threeSum(nums: IntArray): List<List<Int>> {
     val result = mutableListOf<List<Int>>()
     nums.sort()
     for (i in nums.indices) {

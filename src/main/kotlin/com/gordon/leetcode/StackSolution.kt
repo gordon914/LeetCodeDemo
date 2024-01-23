@@ -1,6 +1,7 @@
 package org.example.com.gordon.leetcode
 
 import java.util.*
+import kotlin.Comparator
 
 private fun isValid(s: String): Boolean {
     val stack = LinkedList<Char>()
@@ -122,4 +123,47 @@ class MyQueue {
             queue.pop()
         }
     }
+}
+
+/**
+ * 前k个高频元素
+ */
+private fun topKFrequent(nums: IntArray, k: Int): IntArray {
+    val map = hashMapOf<Int, Int>()
+    nums.forEach {
+        map[it] = map.getOrDefault(it, 0) + 1
+    }
+    val pq = PriorityQueue<IntArray> { o1, o2 -> o1[1] - o2[1] }
+    map.forEach { (key, v) ->
+        val tmp = intArrayOf(key, v)
+        pq.add(tmp)
+        if (pq.size > k) {
+            pq.poll()
+        }
+    }
+    val result = IntArray(k)
+    var index = k
+    while (pq.isNotEmpty() && index > 0) {
+        result[index--] = pq.poll()[1]
+    }
+    return result
+}
+
+/**
+ * gpt优化后的代码
+ */
+private fun topKFrequent2(nums: IntArray, k: Int): IntArray {
+    val map = hashMapOf<Int, Int>()
+    nums.forEach { map[it] = map.getOrDefault(it, 0) + 1 }
+    //按值进行降序排序
+    val pq = PriorityQueue<Map.Entry<Int, Int>>(compareByDescending { it.value })
+    pq.addAll(map.entries)
+
+    val result = IntArray(k)
+    //取出前k个元素
+    for (i in 0 until k) {
+        result[i] = pq.poll().key
+    }
+
+    return result
 }

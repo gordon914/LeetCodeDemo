@@ -122,3 +122,26 @@ private fun postorderTraversal2(root: TreeNode?): List<Int> {
     result.reverse()
     return result
 }
+
+private fun levelOrderBottom(root: TreeNode?): List<List<Int>> {
+    val result = ArrayList<List<Int>>()
+    if (root == null) {
+        return result
+    }
+    val queue = LinkedList<TreeNode>().apply {
+        offer(root)
+    }
+    while (queue.isNotEmpty()) {
+        var size = queue.size
+        val list = ArrayList<Int>()
+        while (size > 0) {
+            val node = queue.poll()
+            list.add(node.`val`)
+            node.left?.let { queue.offer(it) }
+            node.right?.let { queue.offer(it) }
+            size--
+        }
+        result.add(0, list) //逆序插入元素
+    }
+    return result
+}

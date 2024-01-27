@@ -1,7 +1,6 @@
 package org.example.com.gordon.leetcode
 
 import java.util.*
-import kotlin.Comparator
 
 private fun isValid(s: String): Boolean {
     val stack = LinkedList<Char>()

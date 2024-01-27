@@ -145,3 +145,25 @@ private fun levelOrderBottom(root: TreeNode?): List<List<Int>> {
     }
     return result
 }
+
+private fun rightSideView(root: TreeNode?): List<Int> {
+    val result = mutableListOf<Int>()
+    if (root == null) {
+        return result
+    }
+    val queue = LinkedList<TreeNode>().apply {
+        offer(root)
+    }
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        for (i in 0 until size) {
+            val node = queue.poll()
+            node.left?.let { queue.offer(it) }
+            node.right?.let { queue.offer(it) }
+            if (i == size - 1) {
+                result.add(node.`val`)
+            }
+        }
+    }
+    return result
+}

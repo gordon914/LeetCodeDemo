@@ -1,5 +1,6 @@
 package org.example.com.gordon.leetcode
 
+import java.util.Collections
 import java.util.LinkedList
 
 class TreeNode(var `val`: Int) {
@@ -82,5 +83,42 @@ private fun inorderTraversal2(root: TreeNode?): List<Int> {
             curr = node.right
         }
     }
+    return result
+}
+
+private fun postorderTraversal(root: TreeNode?): List<Int> {
+    val result = arrayListOf<Int>()
+    postorder(root, result)
+    return result
+}
+
+private fun postorder(node: TreeNode?, list: ArrayList<Int>) {
+    if (node == null) {
+        return
+    }
+    postorder(node.left, list)
+    postorder(node.right, list)
+    list.add(node.`val`)
+}
+
+/**
+ * 后序遍历   左-->右-->中
+ * 使用前序遍历的方式 中-->左-->右  添加的过程中变成 中-->右-->左 (栈添加的顺序是先左入栈,再右入栈)
+ * 最后再反转结果就是  左-->右-->中
+ */
+private fun postorderTraversal2(root: TreeNode?): List<Int> {
+    val result = arrayListOf<Int>()
+    if (root == null) {
+        return result
+    }
+    val stack = LinkedList<TreeNode>()
+    stack.push(root)
+    while (stack.isNotEmpty()) {
+        val node = stack.pop()
+        result.add(node.`val`)
+        node.left?.let { stack.push(it) }
+        node.right?.let { stack.push(it) }
+    }
+    result.reverse()
     return result
 }

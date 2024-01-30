@@ -167,3 +167,25 @@ private fun rightSideView(root: TreeNode?): List<Int> {
     }
     return result
 }
+
+private fun averageOfLevels(root: TreeNode?): DoubleArray {
+    if (root == null) {
+        return doubleArrayOf(0.0)
+    }
+    val list = arrayListOf<Double>()
+    val queue = LinkedList<TreeNode>().apply {
+        add(root)
+    }
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        var sum = 0.0
+        for (i in 0 until size) {
+            val treeNode = queue.poll()
+            sum+=treeNode.`val`
+            treeNode.left?.let(queue::offer)
+            treeNode.right?.let(queue::offer)
+        }
+        list.add(sum / size)
+    }
+    return list.toDoubleArray()
+}

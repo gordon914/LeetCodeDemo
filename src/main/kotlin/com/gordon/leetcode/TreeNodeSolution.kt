@@ -8,6 +8,12 @@ class TreeNode(var `val`: Int) {
     var right: TreeNode? = null
 }
 
+class Node(var `val`: Int) {
+    var left: Node? = null
+    var right: Node? = null
+    var next: Node? = null
+}
+
 fun preorderTraversal(root: TreeNode?): List<Int> {
     val result = arrayListOf<Int>()
     preorder(root, result)
@@ -181,11 +187,56 @@ private fun averageOfLevels(root: TreeNode?): DoubleArray {
         var sum = 0.0
         for (i in 0 until size) {
             val treeNode = queue.poll()
-            sum+=treeNode.`val`
+            sum += treeNode.`val`
             treeNode.left?.let(queue::offer)
             treeNode.right?.let(queue::offer)
         }
         list.add(sum / size)
     }
     return list.toDoubleArray()
+}
+
+private fun largestValues(root: TreeNode?): List<Int> {
+    if (root == null) {
+        return emptyList()
+    }
+    val result = mutableListOf<Int>()
+    val queue = LinkedList<TreeNode>().apply {
+        add(root)
+    }
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        var max = Int.MIN_VALUE
+        for (i in 0 until size) {
+            val treeNode = queue.poll()
+            max = max.coerceAtLeast(treeNode.`val`)
+            treeNode.left?.let(queue::offer)
+            treeNode.right?.let(queue::offer)
+        }
+        result.add(max)
+    }
+    return result
+}
+
+private fun connect(root: Node?): Node? {
+    if (root == null) {
+        return null
+    }
+    val queue = LinkedList<Node>().apply {
+        offer(root)
+    }
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        for (i in 0 until size) {
+            val node = queue.poll()
+            if (i < size - 1) {
+                node.next = queue.peek()
+            }
+            val left = node.left
+            val right = node.right
+            left?.let(queue::offer)
+            right?.let(queue::offer)
+        }
+    }
+    return root
 }

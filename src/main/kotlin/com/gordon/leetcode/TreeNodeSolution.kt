@@ -1,6 +1,5 @@
 package org.example.com.gordon.leetcode
 
-import java.util.Collections
 import java.util.LinkedList
 
 class TreeNode(var `val`: Int) {
@@ -239,4 +238,67 @@ private fun connect(root: Node?): Node? {
         }
     }
     return root
+}
+
+private fun maxDepth(root: TreeNode?): Int {
+    if (root == null) {
+        return 0
+    }
+    val queue = LinkedList<TreeNode>()
+        .apply { offer(root) }
+    var level = 0
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        level++
+        for (i in 0 until size) {
+            val treeNode = queue.poll()
+            treeNode.left?.let(queue::offer)
+            treeNode.right?.let(queue::offer)
+        }
+    }
+    return level
+}
+
+private fun minDepth(root: TreeNode?): Int {
+    if (root == null) {
+        return 0
+    }
+    val queue = LinkedList<TreeNode>()
+        .apply { offer(root) }
+    var level = 0
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        level++
+        for (i in 0 until size) {
+            val treeNode = queue.poll()
+            if (treeNode.left == null && treeNode.right == null) {
+                return level
+            }
+            treeNode.left?.let(queue::offer)
+            treeNode.right?.let(queue::offer)
+        }
+    }
+    return level
+}
+
+private fun countNodes(root: TreeNode?): Int {
+    if (root == null) {
+        return 0
+    }
+    var leftNode = root.left
+    var rightNode = root.right
+    var leftLen = 0
+    var rightLen = 0
+    while (leftNode != null) {
+        leftNode = leftNode.left
+        leftLen++
+    }
+    while (rightNode != null) {
+        rightNode = rightNode.right
+        rightLen++
+    }
+    if (leftLen == rightLen) {
+        return 2 shl leftLen - 1
+    }
+    return 1 + countNodes(root.left) + countNodes(root.right)
 }

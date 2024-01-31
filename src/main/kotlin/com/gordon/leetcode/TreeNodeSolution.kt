@@ -1,6 +1,7 @@
 package org.example.com.gordon.leetcode
 
 import java.util.LinkedList
+import kotlin.math.abs
 
 class TreeNode(var `val`: Int) {
     var left: TreeNode? = null
@@ -281,6 +282,10 @@ private fun minDepth(root: TreeNode?): Int {
     return level
 }
 
+/**
+ * 完全二叉树最有最后一层可以不满节点
+ * 满二叉树的个数是 2的n次方 -1
+ */
 private fun countNodes(root: TreeNode?): Int {
     if (root == null) {
         return 0
@@ -301,4 +306,58 @@ private fun countNodes(root: TreeNode?): Int {
         return 2 shl leftLen - 1
     }
     return 1 + countNodes(root.left) + countNodes(root.right)
+}
+
+private fun isBalanced(root: TreeNode?): Boolean {
+    return getHeight(root) != -1
+}
+
+private fun getHeight(root: TreeNode?): Int {
+    if (root == null) {
+        return 0
+    }
+    val leftHeight = getHeight(root.left)
+    if (leftHeight == -1) {
+        return -1
+    }
+    val rightHeight = getHeight(root.right)
+    if (rightHeight == -1) {
+        return -1
+    }
+    if (abs(leftHeight - rightHeight) > 1) {
+        return -1
+    }
+    return leftHeight.coerceAtLeast(rightHeight) + 1
+}
+
+private fun binaryTreePaths(root: TreeNode?): List<String> {
+    val result = mutableListOf<String>()
+    if (root == null) {
+        return result
+    }
+    val path = mutableListOf<TreeNode>()
+    travers(root, path, result)
+    return result
+}
+
+private fun travers(node: TreeNode, path: MutableList<TreeNode>, result: MutableList<String>) {
+    path.add(node)
+    if (node.left == null && node.right == null) {
+        val sb = StringBuilder()
+        for (i in 0 until path.lastIndex) {
+            sb.append(path[i].`val`)
+            sb.append("->")
+        }
+        sb.append(path.last().`val`)
+        result.add(sb.toString())
+        return
+    }
+    if (node.left != null) {
+        travers(node.left!!, path, result)
+        path.removeLast()
+    }
+    if (node.right != null) {
+        travers(node.right!!, path, result)
+        path.removeLast()
+    }
 }

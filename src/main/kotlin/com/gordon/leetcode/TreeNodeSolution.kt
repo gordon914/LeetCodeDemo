@@ -361,3 +361,41 @@ private fun travers(node: TreeNode, path: MutableList<TreeNode>, result: Mutable
         path.removeLast()
     }
 }
+
+/**
+ * 翻转二叉树
+ */
+private fun invertTree(root: TreeNode?): TreeNode? {
+    if (root == null) {
+        return root
+    }
+    swapTree(root)
+    invertTree(root.left)
+    invertTree(root.right)
+    return root
+}
+
+private fun swapTree(node: TreeNode) {
+    val temp = node.left
+    node.left = node.right
+    node.right = temp
+}
+
+private fun invertTree2(root: TreeNode?): TreeNode? {
+    if (root == null) {
+        return null
+    }
+    val queue = LinkedList<TreeNode>().apply {
+        offer(root)
+    }
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        for (i in 0 until size) {
+            val treeNode = queue.poll()
+            swapTree(treeNode)
+            treeNode.left?.let(queue::offer)
+            treeNode.right?.let(queue::offer)
+        }
+    }
+    return root
+}

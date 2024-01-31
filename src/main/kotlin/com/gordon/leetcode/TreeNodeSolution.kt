@@ -399,3 +399,24 @@ private fun invertTree2(root: TreeNode?): TreeNode? {
     }
     return root
 }
+
+/**
+ * 左叶子之和
+ * 判断是左叶子,需要用父节点. 父节点的左节点不为null,并且左节点的左右子节点为null.
+ * 递归的左右节点需要有返回值
+ * 单层逻辑是判断为左叶子节点时,用mid表示这个值,然后累加左,右和mid的值.
+ * 本例使用递归算法-->后续遍历
+ */
+private fun sumOfLeftLeaves(root: TreeNode?): Int {
+    if (root == null) {
+        return 0
+    }
+    val leftValue = sumOfLeftLeaves(root.left)
+    val rightValue = sumOfLeftLeaves(root.right)
+    var mid = 0
+    if (root.left != null && root.left!!.left == null && root.left!!.right == null) {
+        mid = root.left!!.`val`
+    }
+    return leftValue + rightValue + mid
+}
+

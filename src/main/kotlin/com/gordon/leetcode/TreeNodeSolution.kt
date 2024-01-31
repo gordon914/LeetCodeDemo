@@ -420,3 +420,21 @@ private fun sumOfLeftLeaves(root: TreeNode?): Int {
     return leftValue + rightValue + mid
 }
 
+private fun isLeaf(node: TreeNode): Boolean {
+    return node.left == null && node.right == null
+}
+
+/**
+ * 路径总和,判断是否含有一条路径上节点的和为目标数
+ */
+private fun hasPathSum(root: TreeNode?, targetSum: Int): Boolean {
+    if (root == null) {
+        return false
+    }
+    val remainingSum = targetSum - root.`val`
+    if (isLeaf(root)) {
+        return remainingSum == 0
+    }
+    return hasPathSum(root.left, remainingSum) || hasPathSum(root.right, remainingSum)
+}
+

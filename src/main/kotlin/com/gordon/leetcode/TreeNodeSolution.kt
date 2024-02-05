@@ -438,3 +438,46 @@ private fun hasPathSum(root: TreeNode?, targetSum: Int): Boolean {
     return hasPathSum(root.left, remainingSum) || hasPathSum(root.right, remainingSum)
 }
 
+/**
+ * 构建二叉树
+ * 中序和后序
+ *           4
+ *      2       7
+ *    1  3    6   8
+ *  中序是 1-->2-->3-->4-->6-->7-->8
+ *  后序是 1-->3-->2-->6-->8-->7-->4
+ *  后序的最后一个点节点是根节点,
+ *  中序根节点是中间节点,它的左边的个数等于后序左边的个数,右边的个数
+ *
+ */
+fun buildTree(inorder: IntArray, postorder: IntArray): TreeNode? {
+    val map = hashMapOf<Int, Int>()
+    inorder.forEachIndexed { index, i ->
+        map[i] = index
+    }
+    return findRoot(inorder, 0, inorder.size, postorder, 0, postorder.size, map)
+}
+
+private fun findRoot(
+    inorder: IntArray,
+    inL: Int,
+    inR: Int,
+    postorder: IntArray,
+    postL: Int,
+    postR: Int,
+    map: Map<Int, Int>
+): TreeNode? {
+    if (inL >= inR || postL >= postR) {
+        return null
+    }
+    val rootIndex = map[postorder[postR - 1]]
+    val root = TreeNode(inorder[rootIndex!!])
+    val leftLen = rootIndex - inL
+    root.left = findRoot(
+        inorder, inL, rootIndex, postorder, postL, postL + leftLen, map
+    )
+    root.right = findRoot(
+        inorder, rootIndex + 1, inR, postorder, postL + leftLen, postR - 1, map
+    )
+    return root
+}

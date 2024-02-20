@@ -481,3 +481,34 @@ private fun findRoot(
     )
     return root
 }
+
+/**
+ * 合并二叉树
+ * 首先判断二者为null的情况
+ * 创建一个root节点,累加两个节点的值
+ * root的left和right,使用递归方法的返回值赋值
+ * 最后返回root
+ */
+fun mergeTrees(root1: TreeNode?, root2: TreeNode?): TreeNode? {
+    if (root1 == null) {
+        return root2
+    }
+    if (root2 == null) {
+        return root1
+    }
+    val root = TreeNode(root1.`val` + root2.`val`)
+    root.left = mergeTrees(root1.left, root2.left)
+    root.right = mergeTrees(root1.right, root2.right)
+    return root
+}
+
+/**
+ * 查找二叉搜索树中的值
+ */
+fun searchBST(root: TreeNode?, `val`: Int): TreeNode? {
+    if (root == null || root.`val` == `val`) {
+        return root
+    }
+    if (root.`val` > `val`) return searchBST(root.left, `val`)
+    return searchBST(root.right, `val`)
+}

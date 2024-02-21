@@ -2,6 +2,7 @@ package org.example.com.gordon.leetcode
 
 import java.util.LinkedList
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 class TreeNode(var `val`: Int) {
     var left: TreeNode? = null
@@ -489,7 +490,7 @@ private fun findRoot(
  * root的left和right,使用递归方法的返回值赋值
  * 最后返回root
  */
-fun mergeTrees(root1: TreeNode?, root2: TreeNode?): TreeNode? {
+private fun mergeTrees(root1: TreeNode?, root2: TreeNode?): TreeNode? {
     if (root1 == null) {
         return root2
     }
@@ -505,10 +506,102 @@ fun mergeTrees(root1: TreeNode?, root2: TreeNode?): TreeNode? {
 /**
  * 查找二叉搜索树中的值
  */
-fun searchBST(root: TreeNode?, `val`: Int): TreeNode? {
+private fun searchBST(root: TreeNode?, `val`: Int): TreeNode? {
     if (root == null || root.`val` == `val`) {
         return root
     }
     if (root.`val` > `val`) return searchBST(root.left, `val`)
     return searchBST(root.right, `val`)
 }
+
+/**
+ * 验证二叉树
+ */
+private fun isValidBST(root: TreeNode?): Boolean {
+    return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE)
+}
+
+private fun isValidBST(node: TreeNode?, low: Long, high: Long): Boolean {
+    if (node == null) {
+        return true
+    }
+    if (node.`val` > high || node.`val` < low) {
+        return false
+    }
+    return isValidBST(node.left, low, node.`val`.toLong()) && isValidBST(node.right, node.`val`.toLong(), high)
+}
+
+/**
+ * BST中两个节点的最小绝对差值
+ */
+private fun getMinimumDifference(root: TreeNode?): Int {
+    if (root == null) {
+        return 0
+    }
+    traversal(root)
+    return result
+}
+
+/**
+ * 中序遍历是有序的,记录上次的节点
+ * 进行计算当前节点与上一个节点的差值,最后取历史中的最小值就好
+ */
+private fun traversal(root: TreeNode?) {
+    if (root == null) {
+        return
+    }
+    traversal(root.left)
+    if (pre != null) {
+        result = result.coerceAtMost(root.`val` - pre!!.`val`)
+    }
+    pre = root
+    traversal(root.right)
+}
+
+private var pre: TreeNode? = null
+private var result: Int = Int.MAX_VALUE
+
+/**
+ * 二叉搜索树中的众数
+ */
+private fun findMode(root: TreeNode?): IntArray {
+    if (root == null) {
+        return IntArray(0)
+    }
+    findModeT(root)
+    return list.toIntArray()
+}
+
+/**
+ * 查找所有的众数,就需要记录每个节点出现的次数
+ * 使用中序遍历,就是有序的.可以使用一个变量来记录上次数的次数,
+ * 并用一个maxCount来记录历史出现的最大次数
+ * 因为需要统计所有的众数,需要一个列表来存储这个值.
+ * 最后将列表转成数组即可
+ */
+private fun findModeT(root: TreeNode?){
+    if (root == null) {
+        return
+    }
+    findModeT(root.left)
+    val rootValue = root.`val`
+    if (preTree == null || preTree!!.`val` != rootValue) {
+        count = 1
+    } else {
+        count++
+    }
+    if (count > maxCount) {
+        list.clear()
+        list.add(rootValue)
+        maxCount = count
+    }else if (count == maxCount) {
+        list.add(rootValue)
+    }
+    preTree = root
+    findModeT(root.right)
+}
+
+private val list = mutableListOf<Int>()
+private var preTree:TreeNode? = null
+private var count:Int = 0
+private var maxCount:Int = 0

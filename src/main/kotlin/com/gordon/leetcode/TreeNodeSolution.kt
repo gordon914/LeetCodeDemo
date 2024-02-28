@@ -1,8 +1,7 @@
 package org.example.com.gordon.leetcode
 
-import java.util.LinkedList
+import java.util.*
 import kotlin.math.abs
-import kotlin.math.absoluteValue
 
 class TreeNode(var `val`: Int) {
     var left: TreeNode? = null
@@ -579,7 +578,7 @@ private fun findMode(root: TreeNode?): IntArray {
  * 因为需要统计所有的众数,需要一个列表来存储这个值.
  * 最后将列表转成数组即可
  */
-private fun findModeT(root: TreeNode?){
+private fun findModeT(root: TreeNode?) {
     if (root == null) {
         return
     }
@@ -594,7 +593,7 @@ private fun findModeT(root: TreeNode?){
         list.clear()
         list.add(rootValue)
         maxCount = count
-    }else if (count == maxCount) {
+    } else if (count == maxCount) {
         list.add(rootValue)
     }
     preTree = root
@@ -602,6 +601,24 @@ private fun findModeT(root: TreeNode?){
 }
 
 private val list = mutableListOf<Int>()
-private var preTree:TreeNode? = null
-private var count:Int = 0
-private var maxCount:Int = 0
+private var preTree: TreeNode? = null
+private var count: Int = 0
+private var maxCount: Int = 0
+
+/**
+ * 二叉树的最近公共祖先
+ */
+private fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
+    if (root == null || root == p || root == q) {
+        return root
+    }
+    val left = lowestCommonAncestor(root.left, p, q)
+    val right = lowestCommonAncestor(root.right, p, q)
+    if (left != null && right != null) {
+        return root
+    }
+    if (left == null) {
+        return right
+    }
+    return left
+}

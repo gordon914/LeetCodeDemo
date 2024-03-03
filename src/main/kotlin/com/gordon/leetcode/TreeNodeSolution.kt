@@ -622,3 +622,16 @@ private fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): T
     }
     return left
 }
+
+/**
+ * 二叉搜索树中的插入操作
+ */
+private fun insertIntoBST(root: TreeNode?, `val`: Int): TreeNode? {
+    if (root == null) {
+        val node = TreeNode(`val`)
+        return node
+    }
+    if (root.`val` > `val`) root.left = insertIntoBST(root.left, `val`)
+    if (root.`val` < `val`) root.right = insertIntoBST(root.right, `val`)
+    return root
+}

@@ -1,6 +1,6 @@
 package org.example.com.gordon.leetcode
 
-
+const val hashTag = "hashTag"
 fun isAnagram(s: String, t: String): Boolean {
     val hash = IntArray(26) { 0 }
     s.forEach {

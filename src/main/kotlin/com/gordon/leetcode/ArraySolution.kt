@@ -1,5 +1,6 @@
 package org.example.com.gordon.leetcode
 
+const val tag = "1"
 /**
  * 移除指定元素
  */

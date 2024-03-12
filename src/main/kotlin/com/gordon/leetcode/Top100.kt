@@ -1,5 +1,7 @@
 package org.example.com.gordon.leetcode
 
+import java.util.Arrays
+
 /**
  * 1. 两数之和
  */
@@ -176,4 +178,74 @@ private fun trap(height: IntArray): Int {
         }
     }
     return ans
+}
+
+/**
+ * 最长无重复的子字符串的长度
+ * 窗口左边是当前字符所在的index
+ * 用hash表记录字符串中所有出现的字符
+ * 右指针不断地往后移动
+ *
+ * 当移动窗口时，从窗口中删除最左边的字符
+ */
+fun lengthOfLongestSubstring(s: String): Int {
+    if (s.isEmpty()) {
+        return 0
+    }
+    var max = 0
+    val hash = hashSetOf<Char>()
+    var rp = -1
+    for (i in s.indices) {
+        if (i > 0) {
+            hash.remove(s[i - 1])
+        }
+        while (rp + 1 < s.length && !hash.contains(s[rp + 1])) {
+            hash.add(s[rp + 1])
+            rp++
+        }
+        max = max.coerceAtLeast(rp - i + 1)
+    }
+    return max
+}
+
+/**
+ * 找到字符串中所有的字母异位词
+ * 固定窗口大小为p的长度
+ * 统计窗口中各个字符的次数，用int【】来表示
+ * 用left，和right记录窗口的位置
+ * 如果窗口的内容和表示p窗口的内容相等，就找到了left
+ */
+fun findAnagrams(s: String, p: String): List<Int> {
+    if (s.length < p.length) {
+        return emptyList()
+    }
+    val result = mutableListOf<Int>()
+    val sArr = IntArray(26)
+    val pArr = IntArray(26)
+    for (i in p.indices) {
+        sArr[s[i]-'a']++
+        pArr[p[i]-'a']++
+    }
+    if (sArr.contentEquals(pArr)) {
+        result.add(0)
+    }
+    var left = 0
+    var right = p.length - 1
+    while (true) {
+        sArr[s[left] - 'a']--
+        left++
+        right++
+        if (right >= s.length) {
+            break
+        }
+        sArr[s[right] - 'a']++
+        if (sArr.contentEquals(pArr)) {
+            result.add(left)
+        }
+    }
+    return result
+}
+
+fun main() {
+    findAnagrams("aa","bb")
 }

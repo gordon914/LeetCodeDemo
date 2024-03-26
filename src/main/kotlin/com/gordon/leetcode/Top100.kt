@@ -223,8 +223,8 @@ fun findAnagrams(s: String, p: String): List<Int> {
     val sArr = IntArray(26)
     val pArr = IntArray(26)
     for (i in p.indices) {
-        sArr[s[i]-'a']++
-        pArr[p[i]-'a']++
+        sArr[s[i] - 'a']++
+        pArr[p[i] - 'a']++
     }
     if (sArr.contentEquals(pArr)) {
         result.add(0)
@@ -246,6 +246,21 @@ fun findAnagrams(s: String, p: String): List<Int> {
     return result
 }
 
+private fun subarraySum(nums: IntArray, k: Int): Int {
+    val map = mutableMapOf<Int, Int>()
+    map[0] = 1
+    var pre = 0
+    var count = 0
+    nums.forEach { i ->
+        pre += i
+        if (map.containsKey(pre - k)) {
+            count += map.getOrDefault(pre - k, 0)
+        }
+        map[pre] = map.getOrDefault(pre, 0) + 1
+    }
+    return count
+}
+
 fun main() {
-    findAnagrams("aa","bb")
+    findAnagrams("aa", "bb")
 }

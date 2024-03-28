@@ -1,7 +1,5 @@
 package org.example.com.gordon.leetcode
 
-import java.util.Arrays
-
 /**
  * 1. 两数之和
  */
@@ -246,6 +244,18 @@ fun findAnagrams(s: String, p: String): List<Int> {
     return result
 }
 
+/**
+ * 和为k的子数组
+ * 1. 假设[0..i]数组的和pre[i],那么pre[i] = pre[i-1]+numbs[i]
+ * 2. 对于从j到i的数组和为k,则有pre[i]-pre[j-1] = k,也即pre[j-1] = pre[i]-k
+ * 3. 用pre记录从左往右,累计nums,那么以和为key,value是其次数.
+ * 4. map[0] = 1 对于数组累加和为0时,表示它们的次数为1次
+ * 遍历完数组,累加count即可
+ * 5. 举例: 对于[1,2,3,4,5] k=7 当遍历到4时,pre = 10,那么只需要知道出现pre-k = 10-7 =3 的次数即可.
+ * 那么之前出现和为3的key有几次呢?是2次. [1,2] 和[3].
+ * 6. 所以统计的次数,就是统计曾经出现过 pre-k为key的个数,不满足的话,就是0次
+ *
+ */
 private fun subarraySum(nums: IntArray, k: Int): Int {
     val map = mutableMapOf<Int, Int>()
     map[0] = 1

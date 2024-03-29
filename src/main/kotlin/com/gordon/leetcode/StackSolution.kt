@@ -84,7 +84,7 @@ private fun evalRPN(tokens: Array<String>): Int {
     return stack.pop().toInt()
 }
 
-private fun maxSlidingWindow(nums: IntArray, k: Int): IntArray {
+fun maxSlidingWindow(nums: IntArray, k: Int): IntArray {
     if (nums.size == 1) {
         return nums
     }
@@ -107,7 +107,7 @@ class MyQueue {
     val queue = LinkedList<Int>()
 
     fun add(value: Int) {
-        while (queue.isNotEmpty() && value > queue.last()) {
+        while (queue.isNotEmpty() && value > queue.last) {
             queue.removeLast()
         }
         queue.add(value)

@@ -1,5 +1,7 @@
 package org.example.com.gordon.leetcode
 
+import Solution
+
 /**
  * 1. 两数之和
  */
@@ -271,6 +273,25 @@ private fun subarraySum(nums: IntArray, k: Int): Int {
     return count
 }
 
-fun main() {
-    findAnagrams("aa", "bb")
+/**
+ * https://leetcode.cn/problems/minimum-window-substring/description/?envType=study-plan-v2&envId=top-100-liked
+ * 76. 最小覆盖子串
+ * 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
+ *
+ */
+fun minWindow(s: String, t: String): String {
+    return Solution().minWindow(s, t)
 }
+
+/**
+ * 滑动窗口的最大值
+ * 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
+ *
+ * 返回 滑动窗口中的最大值 。
+ */
+private fun maxSlidingWindow2(nums: IntArray, k: Int): IntArray {
+    return maxSlidingWindow(nums, k)
+}
+
+
+

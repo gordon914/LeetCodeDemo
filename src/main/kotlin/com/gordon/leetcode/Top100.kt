@@ -11,7 +11,7 @@ private fun twoSum(nums: IntArray, target: Int): IntArray {
         if (map.contains(value)) {
             return intArrayOf(map.getOrDefault(value, 0), index)
         } else {
-            map.put(target - value, index)
+            map[target - value] = index
         }
     }
     return intArrayOf()
@@ -27,12 +27,12 @@ private fun twoSum(nums: IntArray, target: Int): IntArray {
  */
 private fun groupAnagrams(strs: Array<String>): List<List<String>> {
     val map = hashMapOf<String, ArrayList<String>>()
-    strs.forEach {
-        val chars = it.toCharArray()
+    strs.forEach { s ->
+        val chars = s.toCharArray()
         chars.sort()
         val key = String(chars)
         val list = map.getOrDefault(key, arrayListOf())
-        list.add(it)
+        list.add(s)
         map[key] = list
     }
     return map.values.toList()

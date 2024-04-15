@@ -84,8 +84,8 @@ fun getIntersectionNode(headA: ListNode?, headB: ListNode?): ListNode? {
     val distance = len1 - len2
     var fast = headA
     var slow = headB
-    while (distance > 0) {
-        fast = fast?.next
+    while (distance > 0 && fast != null) {
+        fast = fast.next
     }
     while (fast != slow && fast != null) {
         fast = fast.next

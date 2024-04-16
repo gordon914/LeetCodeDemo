@@ -397,9 +397,7 @@ fun findAnagrams(s: String, p: String): List<Int> {
  */
 fun subarraySum(nums: IntArray, k: Int): Int {
     var count = 0
-    val map = mutableMapOf<Int, Int>().apply {
-        put(0, 1)
-    }
+    val map = hashMapOf(0 to 1)
     var pre = 0
     nums.forEach { num ->
         pre += num

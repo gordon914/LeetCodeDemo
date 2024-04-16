@@ -1,5 +1,7 @@
 package org.example.com.gordon.leetcode.top100
 
+import java.util.*
+
 /**
  * 第一题
  * 1.两数之和
@@ -408,4 +410,249 @@ fun subarraySum(nums: IntArray, k: Int): Int {
 
     }
     return count
+}
+
+/**
+ * 第11题 滑动窗口最大值
+ * 239. 滑动窗口最大值
+ * 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
+ *
+ * 返回 滑动窗口中的最大值 。
+ *
+ *
+ *
+ * 示例 1：
+ *
+ * 输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
+ * 输出：[3,3,5,5,6,7]
+ * 解释：
+ * 滑动窗口的位置                最大值
+ * ---------------               -----
+ * [1  3  -1] -3  5  3  6  7       3
+ *  1 [3  -1  -3] 5  3  6  7       3
+ *  1  3 [-1  -3  5] 3  6  7       5
+ *  1  3  -1 [-3  5  3] 6  7       5
+ *  1  3  -1  -3 [5  3  6] 7       6
+ *  1  3  -1  -3  5 [3  6  7]      7
+ * 示例 2：
+ *
+ * 输入：nums = [1], k = 1
+ * 输出：[1]
+ */
+fun maxSlidingWindow(nums: IntArray, k: Int): IntArray {
+    val queue = MyQueue()
+    val ans = mutableListOf<Int>()
+    for (i in 0 until k) {
+        queue.add(nums[i])
+    }
+    ans.add(queue.peek())
+    for (i in k until nums.size) {
+        queue.poll(nums[i - k])
+        queue.add(nums[i])
+        ans.add(queue.peek())
+    }
+    return ans.toIntArray()
+}
+
+class MyQueue {
+    val queue = LinkedList<Int>()
+    fun add(num: Int) {
+        while (queue.isNotEmpty() && num > queue.last()) {
+            queue.removeLast()
+        }
+        queue.add(num)
+    }
+
+    fun peek() = queue.peek()
+    fun poll(num: Int) {
+        if (queue.isNotEmpty() && num == queue.peek()) {
+            queue.poll()
+        }
+    }
+}
+
+/**
+ * 第12题 最小覆盖子串
+ * 76. 最小覆盖子串
+ * 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
+ *
+ *
+ *
+ * 注意：
+ *
+ * 对于 t 中重复字符，我们寻找的子字符串中该字符数量必须不少于 t 中该字符数量。
+ * 如果 s 中存在这样的子串，我们保证它是唯一的答案。
+ *
+ *
+ * 示例 1：
+ *
+ * 输入：s = "ADOBECODEBANC", t = "ABC"
+ * 输出："BANC"
+ * 解释：最小覆盖子串 "BANC" 包含来自字符串 t 的 'A'、'B' 和 'C'。
+ * 示例 2：
+ *
+ * 输入：s = "a", t = "a"
+ * 输出："a"
+ * 解释：整个字符串 s 是最小覆盖子串。
+ * 示例 3:
+ *
+ * 输入: s = "a", t = "aa"
+ * 输出: ""
+ * 解释: t 中两个字符 'a' 均应包含在 s 的子串中，
+ * 因此没有符合条件的子字符串，返回空字符串。
+ */
+fun minWindow(s: String, t: String): String {
+    var lp = 0
+    var rp = -1
+    val oriMap = hashMapOf<Char, Int>()
+    val cntMap = hashMapOf<Char, Int>()
+    var minLen = Int.MAX_VALUE
+    var ansL = -1
+    var ansR = -1
+    t.forEach {
+        oriMap[it] = oriMap.getOrDefault(it, 0) + 1
+    }
+    while (rp < s.length) {
+        rp++
+        if (rp < s.length && oriMap.containsKey(s[rp])) {
+            cntMap[s[rp]] = cntMap.getOrDefault(s[rp], 0) + 1
+        }
+        while (lp <= rp && check(cntMap, oriMap)) {
+            if (rp - lp + 1 < minLen) {
+                minLen = rp - lp + 1
+                ansL = lp
+                ansR = lp + minLen
+            }
+            cntMap[s[lp]] = cntMap.getOrDefault(s[lp], 0) - 1
+            lp++
+        }
+    }
+    return if (ansL == -1) "" else s.substring(ansL, ansR)
+}
+
+private fun check(cnt: Map<Char, Int>, ori: Map<Char, Int>): Boolean {
+    ori.forEach { (key, value) ->
+        if (cnt.getOrDefault(key, 0) < value) {
+            return false
+        }
+    }
+    cnt.forEach { key, u ->
+
+    }
+    return true
+}
+
+
+/**
+ * 第13题 最大子数组和
+ * 53. 最大子数组和
+ * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+ *
+ * 子数组
+ * 是数组中的一个连续部分。
+ *
+ *
+ *
+ * 示例 1：
+ *
+ * 输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+ * 输出：6
+ * 解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+ * 示例 2：
+ *
+ * 输入：nums = [1]
+ * 输出：1
+ * 示例 3：
+ *
+ * 输入：nums = [5,4,-1,7,8]
+ * 输出：23
+ *
+ * 思路:
+ * 假设以i为结尾的子数组最大和为 dp[i]
+ * 则有dp[i] = max(dp[i-1]+nums[i],nums[i])
+ * 遍历数组,取最大值即可.
+ * 空间优化:  dp[i]依赖于上一项,用一个变量来记录上次的值即可.
+ */
+private fun maxSubArray2(nums: IntArray): Int {
+    var maxHistory = Int.MIN_VALUE
+    var pre = 0
+    nums.forEach {
+        pre = maxOf(pre + it, it)
+        maxHistory = maxHistory.coerceAtLeast(pre)
+    }
+    return maxHistory
+}
+
+/**
+ * 第14题 合并区间
+ * 56. 合并区间
+ * 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。
+ * 请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
+ *
+ *
+ *
+ * 示例 1：
+ *
+ * 输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+ * 输出：[[1,6],[8,10],[15,18]]
+ * 解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+ * 示例 2：
+ *
+ * 输入：intervals = [[1,4],[4,5]]
+ * 输出：[[1,5]]
+ * 解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
+ */
+fun merge(intervals: Array<IntArray>): Array<IntArray> {
+    intervals.sortBy { it[0] }
+    val list = mutableListOf<IntArray>()
+    intervals.forEachIndexed { _, values ->
+        if (list.isEmpty() || list.last()[1] < values[0]) {
+            list.add(values)
+        } else {
+            list.last()[1] = maxOf(list.last()[1], values[1])
+        }
+    }
+    return list.toTypedArray()
+}
+
+/**
+ * 第15题 轮转数组
+ * 189. 轮转数组
+ * 给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。
+ *
+ * 示例 1:
+ *
+ * 输入: nums = [1,2,3,4,5,6,7], k = 3
+ * 输出: [5,6,7,1,2,3,4]
+ * 解释:
+ * 向右轮转 1 步: [7,1,2,3,4,5,6]
+ * 向右轮转 2 步: [6,7,1,2,3,4,5]
+ * 向右轮转 3 步: [5,6,7,1,2,3,4]
+ * 示例 2:
+ *
+ * 输入：nums = [-1,-100,3,99], k = 2
+ * 输出：[3,99,-1,-100]
+ * 解释:
+ * 向右轮转 1 步: [99,-1,-100,3]
+ * 向右轮转 2 步: [3,99,-1,-100]
+ */
+fun rotate(nums: IntArray, k: Int): Unit {
+    val fk = k % nums.size
+    if (fk > 0) {
+        reverse(nums, 0, nums.lastIndex)
+        reverse(nums, 0, fk - 1)
+        reverse(nums, fk, nums.lastIndex)
+    }
+}
+
+private fun reverse(nums: IntArray, start: Int, end: Int) {
+    var l = start
+    var r = end
+    while (l <= r) {
+        val tmp = nums[l]
+        nums[l] = nums[r]
+        nums[r] = tmp
+        l++
+        r--
+    }
 }

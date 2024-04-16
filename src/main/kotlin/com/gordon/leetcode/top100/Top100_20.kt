@@ -766,7 +766,7 @@ fun setZeroes(matrix: Array<IntArray>): Unit {
     }
     for (i in 1 until m) {
         for (j in 1 until n) {
-            if (matrix[i][0] == 0 || matrix[0][j]==0) {
+            if (matrix[i][0] == 0 || matrix[0][j] == 0) {
                 matrix[i][j] = 0
             }
         }
@@ -781,4 +781,50 @@ fun setZeroes(matrix: Array<IntArray>): Unit {
             matrix[0][j] = 0
         }
     }
+}
+
+/**
+ * 第19题 螺旋矩阵
+ * 54. 螺旋矩阵
+ * 给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。
+ *
+ * 示例 1：
+ *
+ * 输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+ * 输出：[1,2,3,6,9,8,7,4,5]
+ * 示例 2：
+ *
+ * 输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+ * 输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+ *
+ */
+fun spiralOrder(matrix: Array<IntArray>): List<Int> {
+    val m = matrix.size
+    val n = matrix[0].size
+    var t = 0
+    var b = m - 1
+    var l = 0
+    var r = n - 1
+    val ans = mutableListOf<Int>()
+    while (l <= r && t <= b) {
+        for (i in l until r) {
+            ans.add(matrix[t][i])
+        }
+        for (j in t..b) {
+            ans.add(matrix[j][r])
+        }
+        if (l < r && t < b) {
+            for (i in r - 1 downTo l + 1) {
+                ans.add(matrix[b][i])
+            }
+            for (j in b downTo t + 1) {
+                ans.add(matrix[j][l])
+            }
+        }
+        t++
+        b--
+        l++
+        r--
+    }
+    return ans
 }

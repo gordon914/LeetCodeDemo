@@ -733,3 +733,52 @@ fun firstMissingPositive(nums: IntArray): Int {
     }
     return n + 1
 }
+
+/**
+ * 第18题
+ * 73. 矩阵置零
+ * 给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
+ */
+fun setZeroes(matrix: Array<IntArray>): Unit {
+    val m = matrix.size
+    val n = matrix[0].size
+    var flagCol0 = false
+    var flagRow0 = false
+    for (i in 0 until m) {
+        if (matrix[i][0] == 0) {
+            flagRow0 = true
+            break
+        }
+    }
+    for (j in 0 until n) {
+        if (matrix[0][j] == 0) {
+            flagCol0 = true
+            break
+        }
+    }
+    for (i in 1 until m) {
+        for (j in 1 until n) {
+            if (matrix[i][j] == 0) {
+                matrix[i][0] = 0
+                matrix[0][j] = 0
+            }
+        }
+    }
+    for (i in 1 until m) {
+        for (j in 1 until n) {
+            if (matrix[i][0] == 0 || matrix[0][j]==0) {
+                matrix[i][j] = 0
+            }
+        }
+    }
+    if (flagRow0) {
+        for (i in 0 until m) {
+            matrix[i][0] = 0
+        }
+    }
+    if (flagCol0) {
+        for (j in 0 until n) {
+            matrix[0][j] = 0
+        }
+    }
+}

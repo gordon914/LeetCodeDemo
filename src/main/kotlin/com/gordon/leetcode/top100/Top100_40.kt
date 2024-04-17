@@ -90,3 +90,20 @@ private fun halfListNode(head: ListNode?):ListNode?{
     }
     return slow
 }
+
+/**
+ * 第25题 环形链表
+ * 判断链表中是否有环
+ */
+fun hasCycle(head: ListNode?): Boolean {
+    var fast = head
+    var slow = head
+    while (fast?.next != null && fast.next?.next != null) {
+        fast = fast.next?.next
+        slow = slow?.next
+        if (fast == slow) {
+            return true
+        }
+    }
+    return false
+}

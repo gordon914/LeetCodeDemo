@@ -719,6 +719,7 @@ fun productExceptSelf(nums: IntArray): IntArray {
  */
 fun firstMissingPositive(nums: IntArray): Int {
     val n = nums.size
+    //如果所有的x∈[1,n] 那么必然有nums[nums[i]-1] = x
     for (i in nums.indices) {
         while (nums[i] > 0 && nums[i] <= nums.size && nums[nums[i] - 1] != nums[i]) {
             val tmp = nums[nums[i] - 1]
@@ -726,11 +727,13 @@ fun firstMissingPositive(nums: IntArray): Int {
             nums[i] = tmp
         }
     }
+    //遍历数组,如果当前元素不是连续的,那么i+1就是缺失的元素
     for (i in nums.indices) {
         if (nums[i] != i + 1) {
             return i + 1
         }
     }
+    //都满足了,n+1就是缺失的元素
     return n + 1
 }
 
@@ -742,20 +745,23 @@ fun firstMissingPositive(nums: IntArray): Int {
 fun setZeroes(matrix: Array<IntArray>): Unit {
     val m = matrix.size
     val n = matrix[0].size
-    var flagCol0 = false
-    var flagRow0 = false
+    var firstRowHas0 = false
+    var firstColHas0 = false
+    //标记第一列中是否有0
     for (i in 0 until m) {
         if (matrix[i][0] == 0) {
-            flagRow0 = true
+            firstColHas0 = true
             break
         }
     }
+    //标记第一行中是否有0
     for (j in 0 until n) {
         if (matrix[0][j] == 0) {
-            flagCol0 = true
+            firstRowHas0 = true
             break
         }
     }
+    //从第二行第二列开始遍历,如果存在0,就把对应的行和列的第一个元素标记为0
     for (i in 1 until m) {
         for (j in 1 until n) {
             if (matrix[i][j] == 0) {
@@ -764,6 +770,7 @@ fun setZeroes(matrix: Array<IntArray>): Unit {
             }
         }
     }
+    //再次遍历,如果该元素所在的行或者列第一个值是0,那么就把当前元素置为0
     for (i in 1 until m) {
         for (j in 1 until n) {
             if (matrix[i][0] == 0 || matrix[0][j] == 0) {
@@ -771,12 +778,14 @@ fun setZeroes(matrix: Array<IntArray>): Unit {
             }
         }
     }
-    if (flagRow0) {
+    //把第一列的元素置为0
+    if (firstColHas0) {
         for (i in 0 until m) {
             matrix[i][0] = 0
         }
     }
-    if (flagCol0) {
+    //把第一行的元素置为0
+    if (firstRowHas0) {
         for (j in 0 until n) {
             matrix[0][j] = 0
         }
@@ -868,4 +877,42 @@ fun rotate(matrix: Array<IntArray>): Unit {
             matrix[j][i] = tmp
         }
     }
+}
+
+/**
+ * 第21题 搜索二维矩阵 II
+ * 240. 搜索二维矩阵 II
+ * 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+ *
+ * 每行的元素从左到右升序排列。
+ * 每列的元素从上到下升序排列。
+ *
+ *
+ * 示例 1：
+ *
+ *
+ * 输入：matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5
+ * 输出：true
+ * 示例 2：
+ *
+ *
+ * 输入：matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 20
+ * 输出：false
+ *
+ */
+fun searchMatrix(matrix: Array<IntArray>, target: Int): Boolean {
+    val m = matrix.size
+    val n = matrix[0].size
+    var i = 0
+    var j = n - 1
+    while (i < m && j >= 0) {
+        if (matrix[i][j] == target) {
+            return true
+        } else if (matrix[i][j] > target) {
+            j--
+        } else {
+            i++
+        }
+    }
+    return false
 }

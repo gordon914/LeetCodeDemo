@@ -206,3 +206,24 @@ fun addTwoNumbers(l1: ListNode?, l2: ListNode?): ListNode? {
     }
     return head
 }
+
+/**
+ * 第29题 删除链表倒数第N个元素
+ *
+ */
+fun removeNthFromEnd(head: ListNode?, n: Int): ListNode? {
+    val dummy = ListNode(0).apply {
+        next = head
+    }
+    var fast:ListNode? = dummy
+    var slow:ListNode? = dummy
+    for (i in 0..n) {
+        fast = fast?.next
+    }
+    while (fast != null) {
+        fast = fast.next
+        slow = slow?.next
+    }
+    slow?.next = slow?.next?.next
+    return dummy.next
+}

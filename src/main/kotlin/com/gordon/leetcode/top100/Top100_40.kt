@@ -11,7 +11,7 @@ import org.example.com.gordon.leetcode.ListNode
  *
  * 题目数据 保证 整个链式结构中不存在环。
  */
-private fun getIntersectionNode(headA: ListNode?, headB:ListNode?):ListNode? {
+private fun getIntersectionNode(headA: ListNode?, headB: ListNode?): ListNode? {
     var lenA = 0
     var lenB = 0
     var la = headA
@@ -25,7 +25,7 @@ private fun getIntersectionNode(headA: ListNode?, headB:ListNode?):ListNode? {
         lenB++
     }
     if (lenA < lenB) {
-        return getIntersectionNode(headB,headA)
+        return getIntersectionNode(headB, headA)
     }
     var distance = lenA - lenB
     var fast = headA
@@ -36,6 +36,56 @@ private fun getIntersectionNode(headA: ListNode?, headB:ListNode?):ListNode? {
     }
     while (fast != slow && fast != null) {
         fast = fast.next
+        slow = slow?.next
+    }
+    return slow
+}
+
+/**
+ * 第23题 翻转链表
+ */
+fun reverseList(head: ListNode?): ListNode? {
+    var dummy = head
+    var pre: ListNode? = null
+    var tmp: ListNode? = null
+    while (dummy != null) {
+        tmp = dummy.next
+        dummy.next = pre
+        pre = dummy
+        dummy = tmp
+    }
+    return pre
+}
+
+/**
+ * 第24题 回文链表
+ */
+fun isPalindrome(head: ListNode?): Boolean {
+    if (head == null) {
+        return true
+    }
+    val halfEnd = halfListNode(head)
+    val second = reverseList(halfEnd?.next)
+    var p1 = head
+    var p2 = second
+    var ans = true
+    while (ans && p2 != null) {
+        if (p1?.`val` != p2.`val`) {
+            ans = false
+        }
+        p1 = p1?.next
+        p2 = p2.next
+    }
+    //还原链表
+    halfEnd?.next = reverseList(second)
+    return ans
+}
+
+private fun halfListNode(head: ListNode?):ListNode?{
+    var fast = head
+    var slow = head
+    while (fast?.next != null && fast.next?.next != null) {
+        fast = fast.next?.next
         slow = slow?.next
     }
     return slow

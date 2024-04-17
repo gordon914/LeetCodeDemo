@@ -81,7 +81,7 @@ fun isPalindrome(head: ListNode?): Boolean {
     return ans
 }
 
-private fun halfListNode(head: ListNode?):ListNode?{
+private fun halfListNode(head: ListNode?): ListNode? {
     var fast = head
     var slow = head
     while (fast?.next != null && fast.next?.next != null) {
@@ -106,4 +106,27 @@ fun hasCycle(head: ListNode?): Boolean {
         }
     }
     return false
+}
+
+/**
+ * 第26题 环形链表II
+ * 找到环形链表节点的入口位置
+ */
+fun detectCycle(head: ListNode?): ListNode? {
+    var fast = head
+    var slow = head
+    while (fast?.next != null) {
+        fast = fast.next?.next
+        slow = slow?.next
+        if (fast == slow) {
+            var l1 = head
+            var l2 = slow
+            while (l1 != l2) {
+                l1 = l1?.next
+                l2 = l2?.next
+            }
+            return l2
+        }
+    }
+    return null
 }

@@ -334,3 +334,25 @@ private fun compareTree(left: TreeNode?, right: TreeNode?): Boolean {
     }
     return left.`val` == right.`val` && compareTree(left.left, right.right) && compareTree(left.right, right.left)
 }
+
+/**
+ * 第40题 二叉树的直径
+ * 543. 二叉树的直径 -->任意两个节点直接的最大边的长度
+ * 思路: 最大长度需要的节点= (左深度+右深度+1)
+ * 最终的节点-1 就是最大直径
+ */
+fun diameterOfBinaryTree(root: TreeNode?): Int {
+    depthTree(root)
+    return if (depthAns == Int.MIN_VALUE) 0 else depthAns - 1
+}
+
+private var depthAns = Int.MIN_VALUE
+private fun depthTree(root: TreeNode?): Int {
+    if (root == null) {
+        return 0
+    }
+    val l = depthTree(root.left)
+    val r = depthTree(root.right)
+    depthAns = depthAns.coerceAtLeast(l + r + 1)
+    return maxOf(l, r) + 1
+}

@@ -74,3 +74,30 @@ private fun verifyTree(node: TreeNode?, min: Long, max: Long): Boolean {
     }
     return verifyTree(node.left, min, node.`val`.toLong()) && verifyTree(node.right, node.`val`.toLong(), max)
 }
+
+/**
+ * 第44题 二叉搜索树中第K小的元素
+ * 230. 二叉搜索树中第K小的元素
+ * 给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）。
+ */
+fun kthSmallest(root: TreeNode?, k: Int): Int {
+    if (root == null) {
+        return 0
+    }
+    val leftCount = getCount(root.left)
+    // 注意这里是>=k,少了=就过不了,因为等于k时,在左子树中也能找到
+    if (leftCount >= k) {
+        return kthSmallest(root.left, k)
+    } else if (leftCount + 1 == k) {
+        return root.`val`
+    } else {
+        return kthSmallest(root.right, k - leftCount - 1)
+    }
+}
+
+private fun getCount(node: TreeNode?): Int {
+    if (node == null) {
+        return 0
+    }
+    return getCount(node.left) + getCount(node.right) + 1
+}

@@ -38,7 +38,7 @@ fun levelOrder(root: TreeNode?): List<List<Int>> {
  * 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 平衡 二叉搜索树。
  */
 fun sortedArrayToBST(nums: IntArray): TreeNode? {
-    return buildBST(nums, 0, nums.size -1)
+    return buildBST(nums, 0, nums.size - 1)
 }
 
 private fun buildBST(nums: IntArray, l: Int, r: Int): TreeNode? {
@@ -47,7 +47,30 @@ private fun buildBST(nums: IntArray, l: Int, r: Int): TreeNode? {
     }
     val mid = (l + r) / 2
     val root = TreeNode(nums[mid])
-    root.left = buildBST(nums, l, mid-1)
+    root.left = buildBST(nums, l, mid - 1)
     root.right = buildBST(nums, mid + 1, r)
     return root
+}
+
+/**
+ * 第43题 验证二叉树
+ * 每个节点都比它的左子结点大,比右子节点小
+ * 思路: 使用Long的min和max,防止Int越界.
+ * 空节点返回true
+ * 递归过程先判断当前节点的值是否在最小值和最大值之间.不满足返回false
+ * 递归左子树时,最大值就是当前节点的值,
+ * 递归右子树时,最小值就是当前节点的值
+ */
+fun isValidBST(root: TreeNode?): Boolean {
+    return verifyTree(root, Long.MIN_VALUE, Long.MAX_VALUE)
+}
+
+private fun verifyTree(node: TreeNode?, min: Long, max: Long): Boolean {
+    if (node == null) {
+        return true
+    }
+    if (node.`val` <= min || node.`val` >= max) {
+        return false
+    }
+    return verifyTree(node.left, min, node.`val`.toLong()) && verifyTree(node.right, node.`val`.toLong(), max)
 }

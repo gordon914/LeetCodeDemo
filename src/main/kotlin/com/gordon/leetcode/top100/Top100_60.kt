@@ -148,7 +148,7 @@ fun flatten(root: TreeNode?): Unit {
             val next = curr.left
             var pre = next
             //找到左节点最右边的子节点,也就是前驱节点
-            while (pre?.right!=null){
+            while (pre?.right != null) {
                 pre = pre.right
             }
             //前驱节点的右节点就是当前节点的右节点
@@ -160,4 +160,30 @@ fun flatten(root: TreeNode?): Unit {
         }
         curr = curr.right
     }
+}
+
+/**
+ * 第47题 从前序与中序遍历序列构造二叉树
+ * 105. 从前序与中序遍历序列构造二叉树
+ * 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
+ */
+fun buildTree(preorder: IntArray, inorder: IntArray): TreeNode? {
+    inorder.forEachIndexed { index, i ->
+        nodeMap[i] = index
+    }
+    return buildTree(preorder, 0, preorder.size, inorder, 0, inorder.size)
+}
+
+private val nodeMap = mutableMapOf<Int, Int>()
+private fun buildTree(preorder: IntArray, pl: Int, pr: Int, inorder: IntArray, il: Int, ir: Int): TreeNode? {
+    if (pl >= pr || il > ir) {
+        return null
+    }
+    val midNodeValue = preorder[pl]
+    val pos = nodeMap[midNodeValue]!!
+    val leftSum = pos - il
+    val node = TreeNode(midNodeValue)
+    node.left = buildTree(preorder, pl + 1, pl + leftSum + 1, inorder, il, pos)
+    node.right = buildTree(preorder, pl + leftSum + 1, pr, inorder, pos + 1, ir)
+    return node
 }

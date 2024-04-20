@@ -101,3 +101,63 @@ private fun getCount(node: TreeNode?): Int {
     }
     return getCount(node.left) + getCount(node.right) + 1
 }
+
+/**
+ * 第45题 二叉树的右视图
+ * 199. 二叉树的右视图
+ * 给定一个二叉树的 根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+ */
+fun rightSideView(root: TreeNode?): List<Int> {
+    val ans: MutableList<Int> = mutableListOf()
+    if (root == null) {
+        return ans
+    }
+    val queue = LinkedList<TreeNode>()
+    queue.add(root)
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        for (i in 0 until size) {
+            val node = queue.poll()
+            if (i == size - 1) {
+                ans.add(node.`val`)
+            }
+            node.left?.let {
+                queue.add(it)
+            }
+            node.right?.let {
+                queue.add(it)
+            }
+        }
+    }
+    return ans
+}
+
+/**
+ * 第46题 二叉树展开为链表
+ * 114. 二叉树展开为链表
+ * 给你二叉树的根结点 root ，请你将它展开为一个单链表：
+ *
+ * 展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+ * 展开后的单链表应该与二叉树 先序遍历 顺序相同。
+ */
+fun flatten(root: TreeNode?): Unit {
+    var curr = root
+    while (curr != null) {
+        if (curr.left != null) {
+            //下一个要遍历的节点
+            val next = curr.left
+            var pre = next
+            //找到左节点最右边的子节点,也就是前驱节点
+            while (pre?.right!=null){
+                pre = pre.right
+            }
+            //前驱节点的右节点就是当前节点的右节点
+            pre?.right = curr.right
+            //左节点置空
+            curr.left = null
+            //右节点指向下一个节点
+            curr.right = next
+        }
+        curr = curr.right
+    }
+}

@@ -187,3 +187,30 @@ private fun buildTree(preorder: IntArray, pl: Int, pr: Int, inorder: IntArray, i
     node.right = buildTree(preorder, pl + leftSum + 1, pr, inorder, pos + 1, ir)
     return node
 }
+
+/**
+ * 第48题 路径总和 III
+ * 437. 路径总和 III
+ * 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
+ *
+ * 路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+ */
+fun pathSum(root: TreeNode?, targetSum: Int): Int {
+    if (root == null) {
+        return 0
+    }
+    val prefix = mutableMapOf(0 to 1)
+    return dfs(root,prefix,0,targetSum)
+}
+private fun dfs(root: TreeNode?,prefix:MutableMap<Int,Int>,curr:Int,targetSum: Int):Int{
+    if (root == null) {
+        return 0
+    }
+    val newCurr = curr+root.`val`
+    var ans = prefix.getOrDefault(newCurr-targetSum,0)
+    prefix[newCurr] = prefix.getOrDefault(newCurr,0)+1
+    ans+= dfs(root.left,prefix, newCurr, targetSum)
+    ans+= dfs(root.right,prefix,newCurr,targetSum)
+    prefix[newCurr] = prefix.getOrDefault(newCurr,0)-1
+    return ans
+}

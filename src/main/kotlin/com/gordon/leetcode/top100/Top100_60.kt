@@ -214,3 +214,32 @@ private fun dfs(root: TreeNode?,prefix:MutableMap<Int,Int>,curr:Int,targetSum: I
     prefix[newCurr] = prefix.getOrDefault(newCurr,0)-1
     return ans
 }
+
+/**
+ * 第49题 二叉树的最近公共祖先
+ * 236. 二叉树的最近公共祖先
+ * 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+ *
+ * 最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，
+ * 满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）
+ *
+ * 思路: 本题需要使用个后续遍历,才能找到最近的公共祖先节点
+ * 1.递归的结束条件是 节点为空 或者 节点==p || 节点==q
+ * 2.左右子树的递归需要有返回值
+ * 3.如果left或者right有一个为空就返回另一个节点
+ * 4.都不为空,说明当前节点就是最近的公共祖先
+ */
+fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
+    if (root == null||root==p||root==q) {
+        return root
+    }
+    val left = lowestCommonAncestor(root.left,p,q)
+    val right = lowestCommonAncestor(root.right,p,q)
+    if (left == null) {
+        return right
+    }
+    if (right == null) {
+        return left
+    }
+    return root
+}

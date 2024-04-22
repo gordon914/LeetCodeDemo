@@ -243,3 +243,36 @@ fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode?
     }
     return root
 }
+
+/**
+ * 第50题 二叉树中的最大路径和
+ * 124. 二叉树中的最大路径和
+ * 二叉树中的 路径 被定义为一条节点序列，序列中每对相邻节点之间都存在一条边。
+ * 同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
+ *
+ * 路径和 是路径中各节点值的总和。
+ *
+ * 给你一个二叉树的根节点 root ，返回其 最大路径和 。
+ *
+ * 思路:
+ * 1.使用后序遍历
+ * 2.记录每个节点的最大贡献值,--所谓最大贡献值也就是以当前节点为起始位置的任意路径
+ * 3.所以贡献值的大小就是当前节点的值+左右最大贡献值中的较大值
+ *
+ * 最大的路径和就是 当前节点的值+max(left)+max(right) 最大贡献值最小为0,因为不贡献或者当前节点的贡献是负数时,可以不在路径中
+ */
+fun maxPathSum(root: TreeNode?): Int {
+    maxGain(root)
+    return maxPathSum
+}
+private var maxPathSum = Int.MIN_VALUE
+private fun maxGain(node: TreeNode?):Int{
+    if (node == null) {
+        return 0
+    }
+    val left = maxGain(node.left).coerceAtLeast(0)
+    val right = maxGain(node.right).coerceAtLeast(0)
+    val pathSum = node.`val`+left+right
+    maxPathSum = maxPathSum.coerceAtLeast(pathSum)
+    return node.`val`+ maxOf(left,right)
+}

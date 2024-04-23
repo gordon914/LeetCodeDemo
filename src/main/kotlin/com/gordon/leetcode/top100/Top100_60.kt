@@ -1,278 +1,178 @@
 package org.example.com.gordon.leetcode.top100
 
-import org.example.com.gordon.leetcode.TreeNode
 import java.util.*
+import kotlin.collections.ArrayDeque
 
 /**
- * 第41题 二叉树的层序遍历
- * 102. 二叉树的层序遍历
+ * 第51题 岛屿数量
+ * https://leetcode.cn/problems/number-of-islands/description/?envType=study-plan-v2&envId=top-100-liked
+ *200. 岛屿数量
+ * 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+ *
+ * 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+ *
+ * 此外，你可以假设该网格的四条边均被水包围。
+ *
+ *
  */
-fun levelOrder(root: TreeNode?): List<List<Int>> {
-    val ans = mutableListOf<List<Int>>()
-    if (root == null) {
-        return ans
-    }
-    val queue = LinkedList<TreeNode>()
-    queue.add(root)
-    while (queue.isNotEmpty()) {
-        val size = queue.size
-        val levelList = mutableListOf<Int>()
-        for (i in 0 until size) {
-            val node = queue.poll()
-            levelList.add(node.`val`)
-            node.left?.let {
-                queue.add(it)
-            }
-            node.right?.let {
-                queue.add(it)
+fun numIslands(grid: Array<CharArray>): Int {
+    var count = 0
+    for (i in grid.indices) {
+        for (j in grid[0].indices) {
+            if (grid[i][j] == '1') {
+                dfs(grid, i, j)
+                count++
             }
         }
-        ans.add(levelList)
     }
-    return ans
+    return count
+}
+
+private fun dfs(grid: Array<CharArray>, r: Int, c: Int) {
+    if (!isValidPosition(grid, r, c)) {
+        return
+    }
+    if (grid[r][c] != '1') {
+        return
+    }
+    grid[r][c] = '2'
+    dfs(grid, r, c - 1)
+    dfs(grid, r, c + 1)
+    dfs(grid, r - 1, c)
+    dfs(grid, r + 1, c)
+}
+
+private fun isValidPosition(grid: Array<CharArray>, r: Int, c: Int): Boolean {
+    return r in grid.indices && c in grid[0].indices
+}
+
+private fun exploreIsland(grid: Array<CharArray>, r: Int, c: Int) {
+    val stack = LinkedList<Pair<Int, Int>>()
+    stack.add(r to c)
+    grid[r][c] = '2'
+    val directs = listOf(
+        Pair(-1, 0),
+        Pair(1, 0),
+        Pair(0, -1),
+        Pair(0, 1),
+    )
+    while (stack.isNotEmpty()) {
+        val (x, y) = stack.poll()
+        for (direct in directs) {
+            val newX = x + direct.first
+            val newY = y + direct.second
+            if (isValidPosition(grid, newX, newY) && grid[newX][newY] == '1') {
+                stack.add(newX to newY)
+                grid[newX][newY] = '2'
+            }
+        }
+    }
 }
 
 /**
- * 第42题 将有序数组转换为二叉搜索树
- * 108. 将有序数组转换为二叉搜索树
- * 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 平衡 二叉搜索树。
+ * 第52题 腐烂的橘子
+ *994. 腐烂的橘子
+ * 在给定的 m x n 网格 grid 中，每个单元格可以有以下三个值之一：
+ *
+ * 值 0 代表空单元格；
+ * 值 1 代表新鲜橘子；
+ * 值 2 代表腐烂的橘子。
+ * 每分钟，腐烂的橘子 周围 4 个方向上相邻 的新鲜橘子都会腐烂。
+ *
+ * 返回 直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能，返回 -1 。
  */
-fun sortedArrayToBST(nums: IntArray): TreeNode? {
-    return buildBST(nums, 0, nums.size - 1)
-}
-
-private fun buildBST(nums: IntArray, l: Int, r: Int): TreeNode? {
-    if (l > r) {
-        return null
+fun orangesRotting(grid: Array<IntArray>): Int {
+    val queue = LinkedList<Pair<Int, Int>>()
+    val m = grid.size
+    val n = grid[0].size
+    var count = 0
+    for (i in 0 until m) {
+        for (j in 0 until n) {
+            if (grid[i][j] == 1) {
+                count++
+            } else if (grid[i][j] == 2) {
+                queue.add(i to j)
+            }
+        }
     }
-    val mid = (l + r) / 2
-    val root = TreeNode(nums[mid])
-    root.left = buildBST(nums, l, mid - 1)
-    root.right = buildBST(nums, mid + 1, r)
-    return root
-}
-
-/**
- * 第43题 验证二叉树
- * 每个节点都比它的左子结点大,比右子节点小
- * 思路: 使用Long的min和max,防止Int越界.
- * 空节点返回true
- * 递归过程先判断当前节点的值是否在最小值和最大值之间.不满足返回false
- * 递归左子树时,最大值就是当前节点的值,
- * 递归右子树时,最小值就是当前节点的值
- */
-fun isValidBST(root: TreeNode?): Boolean {
-    return verifyTree(root, Long.MIN_VALUE, Long.MAX_VALUE)
-}
-
-private fun verifyTree(node: TreeNode?, min: Long, max: Long): Boolean {
-    if (node == null) {
-        return true
+    var rount = 0
+    while (count > 0 && queue.isNotEmpty()) {
+        val size = queue.size
+        rount++
+        for (i in 0 until size) {
+            val (r, c) = queue.poll()
+            if (r - 1 >= 0 && grid[r - 1][c] == 1) {
+                count--
+                grid[r - 1][c] = 2
+                queue.add(r - 1 to c)
+            }
+            if (r + 1 < m && grid[r + 1][c] == 1) {
+                count--
+                grid[r + 1][c] = 2
+                queue.add(r + 1 to c)
+            }
+            if (c - 1 >= 0 && grid[r][c - 1] == 1) {
+                count--
+                grid[r][c - 1] = 2
+                queue.add(r to c - 1)
+            }
+            if (c + 1 < n && grid[r][c + 1] == 1) {
+                count--
+                grid[r][c + 1] = 2
+                queue.add(r to c + 1)
+            }
+        }
     }
-    if (node.`val` <= min || node.`val` >= max) {
-        return false
-    }
-    return verifyTree(node.left, min, node.`val`.toLong()) && verifyTree(node.right, node.`val`.toLong(), max)
-}
-
-/**
- * 第44题 二叉搜索树中第K小的元素
- * 230. 二叉搜索树中第K小的元素
- * 给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）。
- */
-fun kthSmallest(root: TreeNode?, k: Int): Int {
-    if (root == null) {
-        return 0
-    }
-    val leftCount = getCount(root.left)
-    // 注意这里是>=k,少了=就过不了,因为等于k时,在左子树中也能找到
-    if (leftCount >= k) {
-        return kthSmallest(root.left, k)
-    } else if (leftCount + 1 == k) {
-        return root.`val`
+    return if (count > 0) {
+        -1
     } else {
-        return kthSmallest(root.right, k - leftCount - 1)
+        rount
     }
-}
-
-private fun getCount(node: TreeNode?): Int {
-    if (node == null) {
-        return 0
-    }
-    return getCount(node.left) + getCount(node.right) + 1
 }
 
 /**
- * 第45题 二叉树的右视图
- * 199. 二叉树的右视图
- * 给定一个二叉树的 根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+ * 第53题 课程表
+ * https://leetcode.cn/problems/course-schedule/description/?envType=study-plan-v2&envId=top-100-liked
+ * 207. 课程表
+ * 你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。
+ *
+ * 在选修某些课程之前需要一些先修课程。 先修课程按数组 prerequisites 给出，其中 prerequisites[i] = [ai, bi] ，表示如果要学习课程 ai 则 必须 先学习课程  bi 。
+ *
+ * 例如，先修课程对 [0, 1] 表示：想要学习课程 0 ，你需要先完成课程 1 。
+ * 请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。
  */
-fun rightSideView(root: TreeNode?): List<Int> {
-    val ans: MutableList<Int> = mutableListOf()
-    if (root == null) {
-        return ans
+fun canFinish(numCourses: Int, prerequisites: Array<IntArray>): Boolean {
+    val map = mutableMapOf<Int, MutableList<Int>>()
+    //1. 构建邻接表
+    for ((course, preCourse) in prerequisites) {
+        map.getOrPut(preCourse) { mutableListOf() }.add(course)
     }
-    val queue = LinkedList<TreeNode>()
-    queue.add(root)
+    //2. 统计每个课程的度数
+    val courseDegrees = IntArray(numCourses)
+    for (courses in map.values) {
+        for (course in courses) {
+            courseDegrees[course]++
+        }
+    }
+    // 将度数为0的课程添加到队列中去
+    val queue = ArrayDeque<Int>()
+    for (i in 0 until numCourses) {
+        if (courseDegrees[i] == 0) {
+            queue.add(i)
+        }
+    }
+    var count = 0
+    // 每次从队列中删除度数为0的课程,并统计删除的个数
     while (queue.isNotEmpty()) {
-        val size = queue.size
-        for (i in 0 until size) {
-            val node = queue.poll()
-            if (i == size - 1) {
-                ans.add(node.`val`)
-            }
-            node.left?.let {
-                queue.add(it)
-            }
-            node.right?.let {
+        val course = queue.removeFirst()
+        count++
+        //遍历邻接表中对应课程的链表(背包),将入度减1,如果此时该课程的度数变为0了,就将其添加到队列中去
+        map[course]?.forEach {
+            courseDegrees[it]--
+            if (courseDegrees[it] == 0) {
                 queue.add(it)
             }
         }
     }
-    return ans
-}
-
-/**
- * 第46题 二叉树展开为链表
- * 114. 二叉树展开为链表
- * 给你二叉树的根结点 root ，请你将它展开为一个单链表：
- *
- * 展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
- * 展开后的单链表应该与二叉树 先序遍历 顺序相同。
- */
-fun flatten(root: TreeNode?): Unit {
-    var curr = root
-    while (curr != null) {
-        if (curr.left != null) {
-            //下一个要遍历的节点
-            val next = curr.left
-            var pre = next
-            //找到左节点最右边的子节点,也就是前驱节点
-            while (pre?.right != null) {
-                pre = pre.right
-            }
-            //前驱节点的右节点就是当前节点的右节点
-            pre?.right = curr.right
-            //左节点置空
-            curr.left = null
-            //右节点指向下一个节点
-            curr.right = next
-        }
-        curr = curr.right
-    }
-}
-
-/**
- * 第47题 从前序与中序遍历序列构造二叉树
- * 105. 从前序与中序遍历序列构造二叉树
- * 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
- */
-fun buildTree(preorder: IntArray, inorder: IntArray): TreeNode? {
-    inorder.forEachIndexed { index, i ->
-        nodeMap[i] = index
-    }
-    return buildTree(preorder, 0, preorder.size, inorder, 0, inorder.size)
-}
-
-private val nodeMap = mutableMapOf<Int, Int>()
-private fun buildTree(preorder: IntArray, pl: Int, pr: Int, inorder: IntArray, il: Int, ir: Int): TreeNode? {
-    if (pl >= pr || il > ir) {
-        return null
-    }
-    val midNodeValue = preorder[pl]
-    val pos = nodeMap[midNodeValue]!!
-    val leftSum = pos - il
-    val node = TreeNode(midNodeValue)
-    node.left = buildTree(preorder, pl + 1, pl + leftSum + 1, inorder, il, pos)
-    node.right = buildTree(preorder, pl + leftSum + 1, pr, inorder, pos + 1, ir)
-    return node
-}
-
-/**
- * 第48题 路径总和 III
- * 437. 路径总和 III
- * 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
- *
- * 路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
- */
-fun pathSum(root: TreeNode?, targetSum: Int): Int {
-    if (root == null) {
-        return 0
-    }
-    val prefix = mutableMapOf(0 to 1)
-    return dfs(root,prefix,0,targetSum)
-}
-private fun dfs(root: TreeNode?,prefix:MutableMap<Int,Int>,curr:Int,targetSum: Int):Int{
-    if (root == null) {
-        return 0
-    }
-    val newCurr = curr+root.`val`
-    var ans = prefix.getOrDefault(newCurr-targetSum,0)
-    prefix[newCurr] = prefix.getOrDefault(newCurr,0)+1
-    ans+= dfs(root.left,prefix, newCurr, targetSum)
-    ans+= dfs(root.right,prefix,newCurr,targetSum)
-    prefix[newCurr] = prefix.getOrDefault(newCurr,0)-1
-    return ans
-}
-
-/**
- * 第49题 二叉树的最近公共祖先
- * 236. 二叉树的最近公共祖先
- * 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
- *
- * 最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，
- * 满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）
- *
- * 思路: 本题需要使用个后续遍历,才能找到最近的公共祖先节点
- * 1.递归的结束条件是 节点为空 或者 节点==p || 节点==q
- * 2.左右子树的递归需要有返回值
- * 3.如果left或者right有一个为空就返回另一个节点
- * 4.都不为空,说明当前节点就是最近的公共祖先
- */
-fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
-    if (root == null||root==p||root==q) {
-        return root
-    }
-    val left = lowestCommonAncestor(root.left,p,q)
-    val right = lowestCommonAncestor(root.right,p,q)
-    if (left == null) {
-        return right
-    }
-    if (right == null) {
-        return left
-    }
-    return root
-}
-
-/**
- * 第50题 二叉树中的最大路径和
- * 124. 二叉树中的最大路径和
- * 二叉树中的 路径 被定义为一条节点序列，序列中每对相邻节点之间都存在一条边。
- * 同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
- *
- * 路径和 是路径中各节点值的总和。
- *
- * 给你一个二叉树的根节点 root ，返回其 最大路径和 。
- *
- * 思路:
- * 1.使用后序遍历
- * 2.记录每个节点的最大贡献值,--所谓最大贡献值也就是以当前节点为起始位置的任意路径
- * 3.所以贡献值的大小就是当前节点的值+左右最大贡献值中的较大值
- *
- * 最大的路径和就是 当前节点的值+max(left)+max(right) 最大贡献值最小为0,因为不贡献或者当前节点的贡献是负数时,可以不在路径中
- */
-fun maxPathSum(root: TreeNode?): Int {
-    maxGain(root)
-    return maxPathSum
-}
-private var maxPathSum = Int.MIN_VALUE
-private fun maxGain(node: TreeNode?):Int{
-    if (node == null) {
-        return 0
-    }
-    val left = maxGain(node.left).coerceAtLeast(0)
-    val right = maxGain(node.right).coerceAtLeast(0)
-    val pathSum = node.`val`+left+right
-    maxPathSum = maxPathSum.coerceAtLeast(pathSum)
-    return node.`val`+ maxOf(left,right)
+    return count == numCourses
 }

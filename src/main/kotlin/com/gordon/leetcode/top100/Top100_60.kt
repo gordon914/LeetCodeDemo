@@ -95,10 +95,10 @@ fun orangesRotting(grid: Array<IntArray>): Int {
             }
         }
     }
-    var rount = 0
+    var round = 0
     while (count > 0 && queue.isNotEmpty()) {
         val size = queue.size
-        rount++
+        round++
         for (i in 0 until size) {
             val (r, c) = queue.poll()
             if (r - 1 >= 0 && grid[r - 1][c] == 1) {
@@ -126,7 +126,7 @@ fun orangesRotting(grid: Array<IntArray>): Int {
     return if (count > 0) {
         -1
     } else {
-        rount
+        round
     }
 }
 

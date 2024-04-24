@@ -807,7 +807,7 @@ fun setZeroes(matrix: Array<IntArray>): Unit {
  * 输出：[1,2,3,4,8,12,11,10,9,5,6,7]
  *
  */
-fun spiralOrder(matrix: Array<IntArray>): List<Int> {
+private fun spiralOrder2(matrix: Array<IntArray>): List<Int> {
     val m = matrix.size
     val n = matrix[0].size
     var t = 0
@@ -860,7 +860,7 @@ fun spiralOrder(matrix: Array<IntArray>): List<Int> {
  * 2. 再沿着对角线45度交换
  * 最后的结果就是旋转了90度
  */
-fun rotate(matrix: Array<IntArray>): Unit {
+private fun rotate2(matrix: Array<IntArray>): Unit {
     val m = matrix.size
     val n = matrix[0].size
     for (i in 0 until m / 2) {

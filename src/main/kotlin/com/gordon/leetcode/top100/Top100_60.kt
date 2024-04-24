@@ -176,3 +176,47 @@ fun canFinish(numCourses: Int, prerequisites: Array<IntArray>): Boolean {
     }
     return count == numCourses
 }
+
+/**
+ * 第54题 前缀树
+ * 字典树的实现
+ */
+class Trie() {
+
+    private var children = Array<Trie?>(26) { null }
+    private var isEnd = false
+    fun insert(word: String) {
+        var node = this
+        for (c in word) {
+            val index = c - 'a'
+            if (children[index] == null) {
+                children[index] = Trie()
+            }
+            node = node.children[index]!!
+        }
+        node.isEnd = true
+    }
+
+    fun search(word: String): Boolean {
+        val trie = searchPrefix(word)
+        return trie?.isEnd == true
+    }
+
+    fun startsWith(prefix: String): Boolean {
+        val trie = searchPrefix(prefix)
+        return trie != null
+    }
+
+    private fun searchPrefix(prefix: String): Trie? {
+        var node = this
+        for (c in prefix) {
+            val index = c - 'a'
+            if (node.children[index] == null) {
+                return null
+            }
+            node = node.children[index]!!
+        }
+        return node
+    }
+
+}

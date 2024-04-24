@@ -189,8 +189,8 @@ class Trie() {
         var node = this
         for (c in word) {
             val index = c - 'a'
-            if (children[index] == null) {
-                children[index] = Trie()
+            if (node.children[index] == null) {
+                node.children[index] = Trie()
             }
             node = node.children[index]!!
         }

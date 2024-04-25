@@ -134,7 +134,13 @@ fun combinationSum(candidates: IntArray, target: Int): List<List<Int>> {
     return ans
 }
 
-private fun combination(candidates: IntArray, target: Int, startIndex: Int, ans: MutableList<List<Int>>, path: MutableList<Int>) {
+private fun combination(
+    candidates: IntArray,
+    target: Int,
+    startIndex: Int,
+    ans: MutableList<List<Int>>,
+    path: MutableList<Int>
+) {
     if (target < 0) {
         return
     }
@@ -211,6 +217,59 @@ fun generateParenthesis(n: Int): List<String> {
             dfs("$path)", left, right - 1)
         }
     }
-    dfs("",n,n)
+    dfs("", n, n)
     return ans
+}
+
+/**
+ * 第60题 单词搜索
+ * 79. 单词搜索
+ * 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+ *
+ * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。
+ * 同一个单元格内的字母不允许被重复使用。
+ */
+fun exist(board: Array<CharArray>, word: String): Boolean {
+    val m = board.size
+    val n = board[0].size
+    val words = word.toCharArray()
+    for (i in 0 until m) {
+        for (j in 0 until n) {
+            val existWord = existWord(board, words, i, j, 0)
+            if (existWord) {
+                return true
+            }
+        }
+    }
+    return false
+}
+
+val directions = arrayOf(
+    1 to 0,
+    -1 to 0,
+    0 to 1,
+    0 to -1
+)
+
+private fun existWord(board: Array<CharArray>, words: CharArray, i: Int, j: Int, k: Int): Boolean {
+    if (i !in board.indices || j !in board[0].indices) {
+        return false
+    }
+    if (words[k] != board[i][j]) {
+        return false
+    }
+    if (k == words.lastIndex) {
+        return true
+    }
+    val origin = board[i][j]
+    board[i][j] = '\u0000'
+    for (direct in directions) {
+        val newX = i + direct.first
+        val newY = j + direct.second
+        if (existWord(board, words, newX, newY, k + 1)) {
+            return true
+        }
+    }
+    board[i][j] = origin
+    return false
 }

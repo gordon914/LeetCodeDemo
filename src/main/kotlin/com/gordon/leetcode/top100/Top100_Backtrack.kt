@@ -273,3 +273,55 @@ private fun existWord(board: Array<CharArray>, words: CharArray, i: Int, j: Int,
     board[i][j] = origin
     return false
 }
+
+/**
+ * 第61题 分割回文串
+ * 131. 分割回文串
+ * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是
+ * 回文串
+ *  。返回 s 所有可能的分割方案。
+ *
+ * 示例 1：
+ *
+ * 输入：s = "aab"
+ * 输出：[["a","a","b"],["aa","b"]]
+ * 示例 2：
+ *
+ * 输入：s = "a"
+ * 输出：[["a"]]
+ */
+fun partition(s: String): List<List<String>> {
+    val ans = mutableListOf<List<String>>()
+    val path = mutableListOf<String>()
+    val len = s.length
+    val words = s.toCharArray()
+    fun dfs(startIndex: Int) {
+        if (startIndex == len) {
+            ans.add(ArrayList(path))
+            return
+        }
+        for (i in startIndex until len) {
+            if (!isPal(words, startIndex, i)) {
+                continue
+            }
+            path.add(String(words, startIndex, i - startIndex + 1))
+            dfs(i + 1)
+            path.removeLast()
+        }
+    }
+    dfs(0)
+    return ans
+}
+
+private fun isPal(words: CharArray, left: Int, right: Int): Boolean {
+    var l = left
+    var r = right
+    while (l < r) {
+        if (words[l] != words[r]) {
+            return false
+        }
+        l++
+        r--
+    }
+    return true
+}

@@ -130,10 +130,11 @@ fun combinationSum(candidates: IntArray, target: Int): List<List<Int>> {
     val ans = mutableListOf<List<Int>>()
     val path = mutableListOf<Int>()
     candidates.sort()
-    combination(candidates,target,0,ans,path)
+    combination(candidates, target, 0, ans, path)
     return ans
 }
-private fun combination(candidates: IntArray,target: Int,startIndex:Int,ans:MutableList<List<Int>>,path:MutableList<Int>){
+
+private fun combination(candidates: IntArray, target: Int, startIndex: Int, ans: MutableList<List<Int>>, path: MutableList<Int>) {
     if (target < 0) {
         return
     }
@@ -143,11 +144,11 @@ private fun combination(candidates: IntArray,target: Int,startIndex:Int,ans:Muta
     }
     for (i in startIndex until candidates.size) {
         val candidate = candidates[i]
-        if (target - candidate<0) {
+        if (target - candidate < 0) {
             break
         }
         path.add(candidate)
-        combination(candidates,target-candidate,i,ans,path)
+        combination(candidates, target - candidate, i, ans, path)
         path.removeLast()
     }
 }
@@ -162,7 +163,7 @@ fun combinationSum2(candidates: IntArray, target: Int): List<List<Int>> {
     val ans = mutableListOf<List<Int>>()
     val path = mutableListOf<Int>()
     candidates.sort()
-    fun findCombination(remindingTarget:Int,startIndex:Int){
+    fun findCombination(remindingTarget: Int, startIndex: Int) {
         if (remindingTarget == 0) {
             ans.add(ArrayList(path))
             return
@@ -173,10 +174,43 @@ fun combinationSum2(candidates: IntArray, target: Int): List<List<Int>> {
                 break
             }
             path.add(candidate)
-            findCombination(target-candidate,i)
+            findCombination(target - candidate, i)
             path.removeLast()
         }
     }
-    findCombination(target,0)
+    findCombination(target, 0)
+    return ans
+}
+
+/**
+ * 第59题 括号生成
+ * 22. 括号生成
+ * 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+ * 示例 1：
+ * 输入：n = 3
+ * 输出：["((()))","(()())","(())()","()(())","()()()"]
+ *
+ * 示例 2：
+ * 输入：n = 1
+ * 输出：["()"]
+ */
+fun generateParenthesis(n: Int): List<String> {
+    val ans = mutableListOf<String>()
+    fun dfs(path: String, left: Int, right: Int) {
+        if (left == 0 && right == 0) {
+            ans.add(path)
+            return
+        }
+        if (left > right) {
+            return
+        }
+        if (left > 0) {
+            dfs("$path(", left - 1, right)
+        }
+        if (right > 0) {
+            dfs("$path)", left, right - 1)
+        }
+    }
+    dfs("",n,n)
     return ans
 }

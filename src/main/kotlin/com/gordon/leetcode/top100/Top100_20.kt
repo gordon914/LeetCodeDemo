@@ -900,7 +900,7 @@ private fun rotate2(matrix: Array<IntArray>): Unit {
  * 输出：false
  *
  */
-fun searchMatrix(matrix: Array<IntArray>, target: Int): Boolean {
+private fun searchMatrix(matrix: Array<IntArray>, target: Int): Boolean {
     val m = matrix.size
     val n = matrix[0].size
     var i = 0

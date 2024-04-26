@@ -325,3 +325,65 @@ private fun isPal(words: CharArray, left: Int, right: Int): Boolean {
     }
     return true
 }
+
+/**
+ * 第62题 N皇后
+ * N皇后
+ *
+ * 思路:
+ * 1.每次从一行中选出一个位置用于放皇后,判断该位置是否有效,直到纵向遍历到底部,可以抽象成一棵树型结构,使用回溯算法
+ * 2.横向遍历是每一列,行不变,行是递归深度,每次+1(作为递归参数传入)
+ * 3.返回值遍历的行到叶子节点了,就是row==n
+ * 4.将二维字符数组转成列表字符串
+ *
+ */
+fun solveNQueens(n: Int): List<List<String>> {
+    val ans = mutableListOf<List<String>>()
+    val chesses = Array(n) { CharArray(n) { '.' } }
+    fun array2List(chesses: Array<CharArray>): List<String> {
+        return chesses.map { String(it) }
+    }
+
+    fun dfs(row: Int) {
+        if (row == n) {
+            ans.add(array2List(chesses))
+            return
+        }
+        for (col in 0 until n) {
+            if (isValidChess(row, col, chesses, n)) {
+                chesses[row][col] = 'Q'
+                dfs(row + 1)
+                chesses[row][col] = '.'
+            }
+        }
+    }
+    dfs(0)
+    return ans
+}
+
+private fun isValidChess(row: Int, col: Int, chesses: Array<CharArray>, n: Int): Boolean {
+    for (i in 0 until row) {
+        if (chesses[i][col] == 'Q') {
+            return false
+        }
+    }
+    var i = row - 1
+    var j = col - 1
+    while (i >= 0 && j >= 0) {
+        if (chesses[i][j] == 'Q') {
+            return false
+        }
+        i--
+        j--
+    }
+    i = row - 1
+    j = col + 1
+    while (i >= 0 && j < n) {
+        if (chesses[i][j] == 'Q') {
+            return false
+        }
+        i--
+        j++
+    }
+    return true
+}

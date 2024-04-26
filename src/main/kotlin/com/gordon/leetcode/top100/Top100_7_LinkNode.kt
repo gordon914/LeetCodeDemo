@@ -1,7 +1,7 @@
 package org.example.com.gordon.leetcode.top100
 
 import org.example.com.gordon.leetcode.ListNode
-import org.example.com.gordon.leetcode.TreeNode
+
 
 /**
  * 第22题 相交链表
@@ -261,98 +261,4 @@ fun swapPairs(head: ListNode?): ListNode? {
         curr = first
     }
     return dummy.next
-}
-
-/**
- * 第36题 二叉树的中序遍历
- */
-fun inorderTraversal(root: TreeNode?): List<Int> {
-    val list = mutableListOf<Int>()
-    inorder(root, list)
-    return list
-}
-
-private fun inorder(node: TreeNode?, list: MutableList<Int>) {
-    if (node == null) {
-        return
-    }
-    inorder(node.left, list)
-    list.add(node.`val`)
-    inorder(node.right, list)
-}
-
-/**
- * 第37题 二叉树的最大深度
- */
-fun maxDepth(root: TreeNode?): Int {
-    if (root == null) {
-        return 0
-    }
-    return maxOf(maxDepth(root.left), maxDepth(root.right)) + 1
-}
-
-/**
- * 第38题 翻转二叉树
- * 思路: 先交换节点
- * 然后递归->左右子节点
- * 不要直接赋值
- */
-fun invertTree(root: TreeNode?): TreeNode? {
-    if (root == null) {
-        return null
-    }
-    swapTreeNode(root)
-    invertTree(root.right)
-    invertTree(root.left)
-    return root
-}
-
-private fun swapTreeNode(node: TreeNode) {
-    val tmp = node.left
-    node.left = node.right
-    node.right = tmp
-}
-
-/**
- * 第39题 对称二叉树
- * 101. 对称二叉树
- * 思路: 对称,就是比较当前节点的左右子节点,如果相等的话,递归调用都相等,那么就是对称的
- */
-fun isSymmetric(root: TreeNode?): Boolean {
-    if (root == null) {
-        return true
-    }
-    return compareTree(root.left, root.right)
-}
-
-private fun compareTree(left: TreeNode?, right: TreeNode?): Boolean {
-    if (left == null && right == null) {
-        return true
-    }
-    if (left == null || right == null) {
-        return false
-    }
-    return left.`val` == right.`val` && compareTree(left.left, right.right) && compareTree(left.right, right.left)
-}
-
-/**
- * 第40题 二叉树的直径
- * 543. 二叉树的直径 -->任意两个节点直接的最大边的长度
- * 思路: 最大长度需要的节点= (左深度+右深度+1)
- * 最终的节点-1 就是最大直径
- */
-fun diameterOfBinaryTree(root: TreeNode?): Int {
-    depthTree(root)
-    return if (depthAns == Int.MIN_VALUE) 0 else depthAns - 1
-}
-
-private var depthAns = Int.MIN_VALUE
-private fun depthTree(root: TreeNode?): Int {
-    if (root == null) {
-        return 0
-    }
-    val l = depthTree(root.left)
-    val r = depthTree(root.right)
-    depthAns = depthAns.coerceAtLeast(l + r + 1)
-    return maxOf(l, r) + 1
 }

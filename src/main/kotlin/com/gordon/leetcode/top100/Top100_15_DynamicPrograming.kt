@@ -177,17 +177,63 @@ fun wordBreak(s: String, wordDict: List<String>): Boolean {
  * 2.初始值,每个dp的数组长度为1
  * 3.逻辑--> 如果nums[i]>nums[j] 则有dp[i] = max(dp[i],dp[j]+1)
  * 4.遍历所有的dp,求最大值.(再步骤3遍历时,用最大值来记录)
+ *
+ * tips: 如果求的是连续递增子序列,只需要一层遍历,
+ * 逻辑-->比较的是与上一个元素进行比较,然后更新dp
  */
 fun lengthOfLIS(nums: IntArray): Int {
-    val dp = IntArray(nums.size){1}
+    val dp = IntArray(nums.size) { 1 }
     var ans = 1 //这里的值是1,只有一个数时,不会执行下面的for循环
     for (i in 1 until nums.size) {
         for (j in 0 until i) {
             if (nums[i] > nums[j]) {
-                dp[i] = maxOf( dp[j]+1,dp[i])
+                dp[i] = maxOf(dp[j] + 1, dp[i])
             }
-            ans = maxOf(ans,dp[i])
+            ans = maxOf(ans, dp[i])
         }
+    }
+    return ans
+}
+
+/**
+ * 第88题 乘积最大子数组
+ * 152. 乘积最大子数组
+ * 给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续
+ * 子数组
+ * （该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+ * 测试用例的答案是一个 32-位 整数。
+ *
+ * 示例 1:
+ *
+ * 输入: nums = [2,3,-2,4]
+ * 输出: 6
+ * 解释: 子数组 [2,3] 有最大乘积 6。
+ *
+ * 思路:
+ * 本题可以使用动态规划区解决.
+ * 由于nums中存在负数,所以它与最长
+ * 定义两个变量一个是imax,一个是imin分别表示以nums[i]结尾的乘积的最大值和最小值
+ * 如果nums[i]<0 -->就交换imax和imin
+ * 同时更新imax = max(imax*nums[i],nums[i]) //负数*最小值 才能使其乘积变得更大.
+ * imin = min(imin*nums[i],nums[i]) //负数*最大值 会使得它的乘积变得更小
+ *
+ * 用变量ans记录历史最大值.
+ *
+ * 1*任意数为当前数本身.  所以初始imin和imax为最大值
+ */
+fun maxProduct(nums: IntArray): Int {
+    var ans = Int.MIN_VALUE
+    var imax = 1
+    var imin = 1
+    for (i in nums.indices) {
+        if (nums[i] < 0) {
+            val tmp = imax
+            imax = imin
+            imin = tmp
+        }
+        imax = maxOf(imax * nums[i], nums[i])
+        imin = minOf(imin * nums[i], nums[i])
+        ans = maxOf(ans, imax)
     }
     return ans
 }

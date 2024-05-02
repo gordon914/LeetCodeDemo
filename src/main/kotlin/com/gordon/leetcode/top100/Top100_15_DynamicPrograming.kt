@@ -237,3 +237,38 @@ fun maxProduct(nums: IntArray): Int {
     }
     return ans
 }
+
+/**
+ * 第89题 分割等和子集
+ * 416. 分割等和子集
+ * 给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+ * 示例 1：
+ *
+ * 输入：nums = [1,5,11,5]
+ * 输出：true
+ * 解释：数组可以分割成 [1, 5, 5] 和 [11] 。
+ *
+ * 思路: 这是一个0,1背包问题
+ * 物品nums,只能选或者不选
+ * 背包,是总和的一半
+ * 定义dp[j]为 容量为j的背包,所能存放的最大的物品价值.(这里物品价值就是它们的值)
+ */
+fun canPartition(nums: IntArray): Boolean {
+    val sum = nums.sum()
+    if (sum % 2 != 0) {
+        return false
+    }
+    val halfSize = sum / 2
+    val dp = IntArray(halfSize + 1)
+    for (i in nums.indices) {
+        var j = halfSize
+        while (j >= nums[i]) {
+            dp[j] = maxOf(dp[j],dp[j-nums[i]]+nums[i])
+            j--
+        }
+        if (dp[halfSize] == halfSize) {
+            return true
+        }
+    }
+    return dp[halfSize] == halfSize
+}

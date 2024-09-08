@@ -1,6 +1,5 @@
 package org.example.com.gordon.leetcode
 
-const val tag = "1"
 /**
  * 移除指定元素
  */
@@ -19,7 +18,7 @@ private fun removeElement(nums: IntArray, `val`: Int): Int {
 
 /**
  * 代码优化
- * 给数组赋值的操作变少了
+ * 给数组赋值的操作变少了,如果只有少量的val值满足,就只需要少次赋值,就满足了条件
  */
 fun removeElement2(nums: IntArray, `val`: Int): Int {
     var left = 0
